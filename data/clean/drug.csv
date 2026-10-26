@@ -1,0 +1,2633 @@
+struct_id,drug_name
+4,levobupivacaine
+5,(S)-nicardipine
+6,(S)-nitrendipine
+13,levdobutamine
+21,aminopterin
+24,phenylbutanoic acid
+25,azacitidine
+26,fluorouracil
+30,methoxsalen
+35,abarelix
+38,acamprosate
+39,acarbose
+40,acebutolol
+43,aceclofenac
+47,acemetacin
+48,acenocoumarol
+49,acefylline
+50,aceprometazine
+52,paracetamol
+54,acetanilide
+55,acetarsol
+56,acetazolamide
+57,acetohexamide
+58,acetohydroxamic acid
+59,acetophenazine
+60,racecadotril
+62,acetoxolone
+65,acetylcholine
+66,acetylcysteine
+67,acetyldigitoxin
+73,acepromazine
+74,acetylsalicylic acid
+76,acipimox
+78,acitretin
+80,aclarubicin
+81,aclatonium
+82,acrivastine
+85,acyclovir
+87,adapalene
+88,adefovir dipivoxil
+89,adenine
+90,adenosine
+91,adenosine triphosphate
+92,adenosine phosphate
+93,adinazolam
+99,agomelatine
+100,ajmaline
+101,alacepril
+105,salbutamol
+107,alclofenac
+109,alcuronium
+111,aldosterone
+112,alendronic acid
+113,alexidine
+114,alfentanil
+115,alfuzosin
+119,aliskiren
+120,alizapride
+124,allopurinol
+128,almotriptan
+129,alosetron
+130,alfacalcidol
+133,alfaxalone
+134,alpidem
+136,alprazolam
+137,alprenolol
+138,alprostadil
+141,altretamine
+143,alvimopan
+144,amantadine
+146,ambenonium
+147,ambroxol
+150,amcinonide
+156,amifostine
+158,amiloride
+160,aminoacridine
+163,aminocaproic acid
+164,aminoglutethimide
+165,aminohippuric acid
+171,aminophenazone
+172,aminopicoline
+174,aminoquinuride
+176,amiodarone
+179,amisulpride
+180,amitriptyline
+181,amitriptylinoxide
+182,amlexanox
+183,amlodipine
+186,amodiaquine
+188,amorolfine
+191,amoxapine
+192,amoxicillin
+193,amperozide
+195,amfetamine
+198,ampicillin
+200,amprenavir
+201,amrinone
+203,amsacrine
+209,anagrelide
+210,anastrozole
+213,androisoxazole
+214,androstenediol
+215,androstenedione
+217,anecortave
+219,anhydrovinblastine
+220,anileridine
+222,anisindione
+223,octatropine methylbromide
+224,antazoline
+226,dithranol
+228,apomorphine
+229,apraclonidine
+230,aprepitant
+231,aprindine
+234,aranidipine
+237,arbutamine
+239,argatroban
+242,aripiprazole
+243,arotinolol
+244,arsenic trioxide
+249,astemizole
+252,asulacrine
+254,atazanavir
+255,atenolol
+256,atomoxetine
+257,atorvastatin
+258,atovaquone
+259,atracurium
+260,atropine
+266,azapropazone
+267,azasetron
+268,azatadine
+269,azathioprine
+270,azelaic acid
+271,azelastine
+272,azelnidipine
+274,azimilide
+276,azithromycin
+281,bacitracin
+282,baclofen
+284,balsalazide
+285,bambuterol
+288,bamipine
+290,barnidipine
+294,beclometasone dipropionate
+296,belotecan
+299,benazepril
+302,bendamustine
+305,bendroflumethiazide
+311,benoxaprofen
+312,benperidol
+313,diphenidol
+314,benserazide
+317,benzarone
+318,benzbromarone
+321,benziodarone
+323,benzocaine
+326,benzonatate
+329,benzphetamine
+331,benzquinamide
+332,benzthiazide
+333,benzatropine
+341,bepotastine
+342,bepridil
+343,beraprost
+346,betahistine
+348,betamethasone
+349,betamethasone acetate
+351,betamethasone benzoate
+353,betamethasone dipropionate
+354,betamethasone valerate
+355,betamipron
+356,betaxolol
+357,betazole
+358,bethanechol
+359,betanidine
+360,bevantolol
+361,bexarotene
+362,bezafibrate
+367,bicalutamide
+369,bifemelane
+370,bifonazole
+371,bimatoprost
+373,biotin
+374,biperiden
+375,bisacodyl
+376,bisantrene
+380,bisoprolol
+383,bisulepine
+384,bitolterol
+385,bivalirudin
+388,blonanserin
+389,bopindolol
+391,bortezomib
+392,bosentan
+394,bretylium
+395,brimonidine
+396,brinzolamide
+397,brivudine
+399,bromazepam
+401,bromfenac
+402,bromhexine
+403,bromocriptine
+404,bromazine
+406,bromopride
+407,bromperidol
+408,brompheniramine
+409,brotizolam
+416,buclizine
+419,budesonide
+420,budipine
+422,buflomedil
+424,bufuralol
+427,bumetanide
+429,bunazosin
+431,levobunolol
+432,bupivacaine
+433,bupranolol
+434,buprenorphine
+435,bupropion
+436,buserelin
+437,buspirone
+438,busulfan
+439,secbutabarbital
+441,butalbital
+444,butenafine
+454,butorphanol
+455,butriptyline
+458,scopolamine butylbromide
+460,cabergoline
+461,cadralazine
+463,caffeine
+464,calcifediol
+465,calcipotriene
+466,calcitriol
+471,camostat
+472,camylofin
+475,candesartan cilexetil
+478,canrenone
+480,capecitabine
+484,captopril
+486,caramiphen
+487,carazolol
+488,carbachol
+489,carbamazepine
+492,carbenicillin
+493,carbenoxolone
+494,pentoxyverine
+495,carbetocin
+496,carbidopa
+497,carbimazole
+499,carbinoxamine
+502,carboprost
+505,carbutamide
+510,carubicin
+511,carmofur
+512,carmustine
+513,levocarnitine
+515,carperitide
+516,carfenazine
+517,carpipramine
+518,carprofen
+520,carteolol
+522,carvedilol
+526,cefadroxil
+527,cefamandole
+534,cefditoren pivoxil
+537,cefixime
+539,cefmetazole
+542,cefonicid
+547,cefotetan
+548,cefotiam
+558,cefsulodin
+564,ceftriaxone
+565,cefuroxime
+568,celecoxib
+569,celiprolol
+571,cefalexin
+574,cefalotin
+575,cefapirin
+576,cefradine
+577,cerivastatin
+578,cerulenin
+579,ceruletide
+581,cetirizine
+583,cetrorelix
+584,cevimeline
+588,chlorambucil
+589,chloramphenicol
+593,chlorcyclizine
+594,chlordiazepoxide
+597,chlorhexidine
+600,chlormadinone
+602,clomethiazole
+605,chloroprocaine
+606,chloropyramine
+607,chloroquine
+609,chlorothiazide
+610,chlorotrianisene
+611,chloroxine
+616,chlorphenamine
+618,chlorphentermine
+619,chlorproethazine
+621,chlorpromazine
+622,chlorpropamide
+623,chlorprothixene
+624,chlortetracycline
+625,chlortalidone
+626,chlorzoxazone
+629,cianidanol
+630,cibenzoline
+631,cicaprost
+633,ciclesonide
+636,ciclopirox
+637,cicloprolol
+640,cilastatin
+641,cilazapril
+642,cilnidipine
+644,cilostazol
+645,cimetidine
+647,cinacalcet
+648,cinalukast
+654,cinnarizine
+657,cinoxacin
+658,ciprofibrate
+659,ciprofloxacin
+660,cisapride
+661,cisatracurium
+663,citalopram
+667,cladribine
+668,clarithromycin
+670,clebopride
+671,clemastine
+672,clemizole
+673,clenbuterol
+674,clevidipine
+676,clidinium
+681,clioquinol
+682,clobazam
+690,clodronic acid
+691,clofarabine
+692,clofazimine
+694,clofibrate
+695,clofibric acid
+700,clomifene
+701,clomipramine
+703,clonazepam
+704,clonidine
+705,clonixin
+707,cloperastine
+708,clopidogrel
+711,clorazepate
+714,clorprenaline
+717,clotiapine
+719,clotrimazole
+721,cloxazolam
+722,clozapine
+723,cocaine
+725,codeine
+726,colchicine
+729,colforsin daropate
+732,conivaptan
+734,cortisone acetate
+736,cortivazol
+737,cotinine
+738,coumarin
+741,cromoglicic acid
+746,cyamemazine
+749,cyclizine
+751,cyclobenzaprine
+753,cyclofenil
+754,cycloguanil
+757,cyclopentolate
+758,cyclophosphamide
+759,cycloserine
+760,ciclosporin
+761,cyclothiazide
+762,cyclovalone
+763,cycrimine
+765,cyproheptadine
+766,cyproterone acetate
+769,cysteine
+770,cytarabine
+773,dacarbazine
+774,dactinomycin
+776,dabigatran etexilate
+779,danazol
+780,dantrolene
+781,dapiprazole
+782,dapsone
+784,darifenacin
+785,dasatinib
+786,daunorubicin
+788,debrisoquine
+789,decamethonium
+790,decitabine
+792,deferoxamine
+795,prasterone
+798,delapril
+799,delavirdine
+800,delorazepam
+801,demecarium
+802,demeclocycline
+806,denopamine
+809,desalkylflurazepam
+810,deserpidine
+811,desflurane
+812,desipramine
+813,deslanoside
+814,desloratadine
+816,nordazepam
+817,desmopressin
+818,desogestrel
+819,desoximetasone
+820,desoxycortone
+821,desoxycorticosterone acetate
+822,desoxycorticosterone pivalate
+824,dexamethasone
+826,dexamethasone acetate
+828,dexamethasone palmitate
+829,dexamethasone valerate
+830,dexbrompheniramine
+831,dexetimide
+832,dexfenfluramine
+833,dexketoprofen
+834,dexloxiglumide
+835,dexmedetomidine
+836,dexmethylphenidate
+837,dexniguldipine
+839,dexrazoxane
+841,dexamfetamine
+842,dextromethorphan
+844,dextropropoxyphene
+846,dextrothyroxine
+847,dezocine
+849,diacerein
+852,diazepam
+854,diazoxide
+856,dibenzepin
+859,cinchocaine
+861,phenazone
+862,dichloroacetic acid
+863,dichlorophen
+864,dichlorphenamide
+865,diclofenac
+866,dicloxacillin
+867,dicoumarol
+868,dicycloverine
+870,dienestrol
+871,dienogest
+873,diethylcarbamazine
+874,diethylpropion
+875,diethylstilbestrol
+878,difenoxin
+880,diflunisal
+881,digitoxin
+882,digoxin
+885,alpha-Ergocryptine
+886,dihydrocodeine
+887,dihydroergocristine
+888,dihydroergotamine
+889,hydroquinidine
+893,dilazep
+894,dilevalol
+897,diltiazem
+900,dimemorfan
+901,dimenhydrinate
+903,dimetindene
+908,dimethyltubocurarinium
+911,dioxyline
+912,dinoprost
+913,dinoprostone
+915,diphemanil
+916,diphenhydramine
+918,diphenoxylate
+920,diphenylpyraline
+922,dipivefrine
+923,diprafenone
+924,dipyridamole
+926,disopyramide
+927,distigmine
+928,disulfiram
+931,ditiocarb
+934,levomenthol
+937,dobutamine
+939,docetaxel
+942,dofetilide
+945,domperidone
+946,donepezil
+947,dopamine
+948,dopexamine
+949,dorzolamide
+951,dosulepin
+953,doxapram
+954,doxazosin
+956,doxepin
+957,doxercalciferol
+958,doxifluridine
+960,doxorubicin
+961,doxycycline
+962,doxylamine
+965,drostanolone propionate
+966,droperidol
+968,drospirenone
+969,drotaverine
+971,droxidopa
+972,duloxetine
+973,dutasteride
+974,dyclonine
+975,dydrogesterone
+976,diprophylline
+977,ebastine
+979,ebrotidine
+982,echothiophate
+983,econazole
+986,edatrexate
+987,edetic acid
+988,edrophonium
+989,efavirenz
+990,eflornithine
+992,efonidipine
+995,eletriptan
+996,elliptinium
+997,eltanolone
+999,emedastine
+1001,emetine
+1005,enalapril
+1006,enalaprilat
+1007,encainide
+1008,endralazine
+1009,enflurane
+1013,enoxacin
+1014,enoximone
+1015,enprofylline
+1016,enprostil
+1018,entacapone
+1021,epalrestat
+1022,eperisone
+1024,ephedrine
+1027,epinastine
+1028,epinephrine
+1030,epirubicin
+1032,eplerenone
+1034,epoprostenol
+1037,eprosartan
+1040,eptifibatide
+1042,ergometrine
+1043,ergotamine
+1044,eritoran
+1045,erlotinib
+1048,erythromycin
+1052,erythromycin propionate
+1053,escitalopram
+1054,esmolol
+1055,esomeprazole
+1056,estazolam
+1057,estradiol
+1058,estradiol benzoate
+1059,estradiol cypionate
+1064,estradiol valerate
+1066,estramustine phosphate
+1067,estriol succinate
+1068,eszopiclone
+1071,ethacrynic acid
+1073,ethambutol
+1076,ethanol
+1077,ethaverine
+1078,ethchlorvynol
+1082,ethinylestradiol
+1084,ethisterone
+1086,profenamine
+1087,ethosuximide
+1088,ethotoin
+1089,ethoxzolamide
+1091,ethyl biscoumacetate
+1094,ethylestrenol
+1095,etynodiol
+1097,etidocaine
+1100,etilamfetamine
+1101,etilefrine
+1102,etizolam
+1103,etodolac
+1107,etofylline
+1109,etomidate
+1110,etonogestrel
+1111,etoperidone
+1112,etoposide
+1113,etoricoxib
+1115,etravirine
+1116,etretinate
+1118,everolimus
+1119,exalamide
+1122,exemestane
+1123,exenatide
+1125,ezetimibe
+1126,fadrozole
+1129,famotidine
+1130,famprofazone
+1132,fasudil
+1137,febuxostat
+1140,felbamate
+1141,felbinac
+1142,felodipine
+1145,fenbufen
+1148,fendiline
+1150,fenfluramine
+1152,fenofibrate
+1153,fenoldopam
+1154,fenoprofen
+1155,fenoterol
+1164,fentanyl
+1165,fentiazac
+1170,fexofenadine
+1171,finasteride
+1175,flavoxate
+1176,flecainide
+1178,floctafenine
+1180,flopropione
+1183,floxacillin
+1184,floxuridine
+1187,fluconazole
+1188,flucytosine
+1189,fludarabine phosphate
+1191,fludrocortisone acetate
+1193,flufenamic acid
+1195,flumazenil
+1198,flumetasone pivalate
+1200,flunarizine
+1201,flunisolide
+1202,flunitrazepam
+1204,fluocinolone acetonide
+1205,fluocinonide
+1207,fluorescein
+1208,fluorometholone
+1209,fluoxetine
+1210,fluoxymesterone
+1211,flupentixol
+1212,fluphenazine
+1213,fluphenazine decanoate
+1214,fluphenazine enanthate
+1215,flupirtine
+1216,fluprednisolone
+1217,fludroxycortide
+1218,flurazepam
+1219,flurbiprofen
+1222,fluspirilene
+1223,flutamide
+1225,fluticasone propionate
+1227,flutrimazole
+1229,fluvastatin
+1230,fluvoxamine
+1231,folic acid
+1232,leucovorin
+1233,fomepizole
+1236,fondaparinux
+1238,formestane
+1239,formoterol
+1245,fosinopril
+1247,fosphenytoin
+1251,frovatriptan
+1252,fructose
+1253,ftivazide
+1255,fulvestrant
+1256,furaltadone
+1258,furosemide
+1261,fusidic acid
+1262,aminobutyric acid
+1264,gabapentin
+1272,galantamine
+1273,gallamine
+1275,gallopamil
+1276,gamolenic acid
+1277,ganciclovir
+1279,ganirelix
+1282,gefitinib
+1283,gemcitabine
+1285,gemfibrozil
+1286,gemifloxacin
+1291,gestodene
+1292,gestrinone
+1293,gimeracil
+1297,glafenine
+1298,glibornuride
+1299,gliclazide
+1300,glimepiride
+1301,glipizide
+1302,gliquidone
+1305,glisoxepide
+1310,glutamic acid
+1312,glutathione
+1313,glutethimide
+1314,glibenclamide
+1319,glycine
+1325,glycyrrhizic acid
+1327,goserelin
+1328,gossypol
+1329,granisetron
+1330,grepafloxacin
+1331,griseofulvin
+1334,guaiacol
+1339,guanadrel
+1342,guanethidine
+1343,guanfacine
+1344,guanidine
+1348,halazepam
+1349,ulobetasol propionate
+1350,halofantrine
+1353,haloperidol
+1354,halopredone acetate
+1355,haloprogin
+1356,halothane
+1358,heparin
+1362,hesperetin
+1364,hexachlorophene
+1365,hexafluronium
+1366,hexamethonium
+1368,hexestrol
+1369,hexobarbital
+1370,hexobendine
+1371,hexocyclium
+1373,hexylcaine
+1374,hexylresorcinol
+1375,histamine
+1377,histidine
+1379,homatropine
+1383,hycanthone
+1384,hydralazine
+1385,hydrochlorothiazide
+1386,hydrocodone
+1387,hydrocortamate
+1388,hydrocortisone
+1390,hydrocortisone cypionate
+1392,hydroflumethiazide
+1393,hydromorphone
+1394,hydroxyamfetamine
+1395,hydroxychloroquine
+1399,hydroxycarbamide
+1400,hydroxyzine
+1401,hymecromone
+1402,hyoscyamine
+1404,ibandronic acid
+1406,ibudilast
+1407,ibuprofen
+1412,ibutilide
+1413,icosapent ethyl
+1414,idarubicin
+1416,idebenone
+1417,idoxuridine
+1419,ifenprodil
+1422,iloprost
+1423,imatinib
+1424,imidapril
+1427,imipramine
+1429,imiquimod
+1431,incadronic acid
+1433,indapamide
+1434,indecainide
+1436,indenolol
+1437,indinavir
+1438,indisetron
+1439,indobufen
+1440,indomethacin
+1442,indoprofen
+1443,indoramin
+1446,intoplicine
+1457,diiodohydroxyquinoline
+1475,ipratropium
+1477,ipriflavone
+1478,iprindole
+1480,iproniazid
+1481,irbesartan
+1482,irinotecan
+1483,irofulven
+1490,isocarboxazid
+1491,isoetarine
+1493,isoflurane
+1494,fluostigmine
+1497,isoniazid
+1499,isoprenaline
+1500,isopropamide
+1505,isosorbide dinitrate
+1506,isosorbide mononitrate
+1508,isotretinoin
+1509,isoxicam
+1511,isradipine
+1513,itraconazole
+1517,ixabepilone
+1519,kanamycin
+1523,ketamine
+1524,ketanserin
+1526,ketobemidone
+1527,ketoconazole
+1528,ketoprofen
+1529,ketorolac
+1530,ketotifen
+1531,labetalol
+1532,lacidipine
+1535,lactose
+1539,lamivudine
+1540,lamotrigine
+1545,landiolol
+1546,lanreotide
+1547,lansoprazole
+1548,lapatinib
+1549,arginine
+1550,aspartic acid
+1551,latanoprost
+1552,leflunomide
+1556,letrozole
+1557,leucine
+1559,leuprorelin
+1560,levallorphan
+1561,levamisole
+1562,levamfetamine
+1563,levetiracetam
+1564,levocabastine
+1566,levocetirizine
+1567,levodopa
+1569,levofloxacin
+1571,levomethadyl acetate
+1572,levonorgestrel
+1573,levopropoxyphene
+1574,levorphanol
+1575,levosalbutamol
+1576,levosimendan
+1577,levosulpiride
+1579,lidocaine
+1580,lidoflazine
+1581,limaprost
+1583,lindane
+1584,linezolid
+1585,liothyronine
+1587,lisinopril
+1588,lisuride
+1592,lofepramine
+1593,lofexidine
+1595,lomerizine
+1597,lonazolac
+1598,lonidamine
+1599,loperamide
+1601,lopinavir
+1602,loprazolam
+1605,loratadine
+1606,lorazepam
+1607,lorcainide
+1610,losartan
+1611,loteprednol etabonate
+1612,lovastatin
+1613,loxapine
+1614,loxiglumide
+1615,loxoprofen
+1616,lucanthone
+1617,lumefantrine
+1618,lumiracoxib
+1621,lysergide
+1622,lysine
+1624,mafenide
+1626,malathion
+1631,manidipine
+1634,maprotiline
+1635,maraviroc
+1637,masoprocol
+1638,maxacalcitol
+1640,mazindol
+1641,mebendazole
+1643,mebhydrolin
+1646,mecamylamine
+1649,meclozine
+1650,meclofenamic acid
+1655,medetomidine
+1658,medroxalol
+1659,medroxyprogesterone
+1662,medrysone
+1663,mefenamic acid
+1665,mefloquine
+1667,megestrol acetate
+1670,meglutol
+1672,melatonin
+1676,meloxicam
+1677,melperone
+1679,memantine
+1683,menadione
+1685,menatetrenone
+1688,pecazine
+1689,mepenzolate
+1690,pethidine
+1694,mephentermine
+1695,mephenytoin
+1696,methylphenobarbital
+1700,mepivacaine
+1702,meprednisone
+1704,meprobamate
+1705,meproscillarin
+1706,meptazinol
+1707,mequitazine
+1708,mercaptopurine
+1710,mesalazine
+1712,mesoridazine
+1714,mestranol
+1720,orciprenaline
+1721,metaraminol
+1723,metergoline
+1725,metformin
+1726,methacholine
+1727,metacycline
+1728,methadone
+1729,acetylmethadol
+1732,methamphetamine
+1736,methanthelinium
+1738,methapyrilene
+1739,methaqualone
+1740,metharbital
+1741,methazolamide
+1742,methdilazine
+1745,thiamazole
+1747,methocarbamol
+1748,methohexital
+1751,methotrexate
+1752,levomepromazine
+1753,methoxamine
+1754,methoxyflurane
+1757,methscopolamine
+1758,methsuximide
+1759,methylclothiazide
+1761,metildigoxin
+1762,methyldopa
+1763,methylthioninium chloride
+1764,methylergometrine
+1765,naltrexone
+1766,methylparaben
+1767,methylphenidate
+1768,methylprednisolone
+1770,methylprednisolone acetate
+1771,methylprednisolone succinate
+1773,methylthiouracil
+1774,methyprylon
+1775,methysergide
+1779,metipranolol
+1780,metixene
+1781,metochalcone
+1782,metoclopramide
+1783,metolazone
+1784,metopimazine
+1786,metoprolol
+1791,metyrapone
+1792,metirosine
+1794,mexiletine
+1795,mezlocillin
+1796,mianserin
+1797,mibefradil
+1798,micafungin
+1800,miconazole
+1802,midazolam
+1803,midodrine
+1805,mifepristone
+1806,miglitol
+1807,miglustat
+1808,milnacipran
+1809,milrinone
+1810,miltefosine
+1811,mimosine
+1812,minaprine
+1814,minoxidil
+1816,mirtazapine
+1817,misoprostol
+1818,mitiglinide
+1819,mitomycin
+1820,mitotane
+1821,mitoxantrone
+1822,mivacurium
+1824,mizolastine
+1825,moclobemide
+1826,modafinil
+1827,moexipril
+1829,mofezolac
+1830,molindone
+1831,molsidomine
+1832,mometasone furoate
+1834,monobenzone
+1836,montelukast
+1837,moperone
+1842,moracizine
+1845,morphine
+1847,mosapramine
+1848,mosapride
+1852,moxastine
+1856,moxonidine
+1857,mupirocin
+1859,mycophenolate mofetil
+1860,mycophenolic acid
+1862,nabilone
+1863,nabumetone
+1865,nadolol
+1867,nafamostat
+1868,nafarelin
+1870,naftidrofuryl
+1872,naftifine
+1873,naftopidil
+1874,nalbuphine
+1875,nalidixic acid
+1876,nalmefene
+1877,nalorphine
+1878,naloxone
+1879,nandrolone
+1881,nandrolone decanoate
+1882,nandrolone phenpropionate
+1883,naproxen
+1884,naratriptan
+1886,nateglinide
+1887,nebivolol
+1889,nedocromil
+1890,nefazodone
+1891,nefopam
+1893,nelfinavir
+1895,nemonapride
+1896,framycetin
+1897,neostigmine
+1899,nepafenac
+1900,nepinalone
+1901,nesiritide
+1906,nicotinamide
+1909,nicardipine
+1912,niclosamide
+1919,nicorandil
+1920,nicotine
+1922,nifedipine
+1923,nifekalant
+1925,niflumic acid
+1928,nifuroxazide
+1932,nilotinib
+1933,nilutamide
+1934,nilvadipine
+1935,nimesulide
+1937,nimodipine
+1942,nisoldipine
+1943,nitazoxanide
+1944,nitisinone
+1945,nitrazepam
+1947,nitrendipine
+1948,nitric oxide
+1949,nitrofurantoin
+1950,nitrofurazone
+1952,glyceryl trinitrate
+1954,nitroxoline
+1955,nizatidine
+1958,nomifensine
+1959,norelgestromin
+1960,norepinephrine
+1962,norethisterone
+1963,norethindrone acetate
+1965,norethynodrel
+1967,norfloxacin
+1968,norgestimate
+1969,normethadone
+1971,nortriptyline
+1973,noscapine
+1974,novobiocin
+1976,buphenine
+1980,octreotide
+1981,ofloxacin
+1982,olanzapine
+1985,olmesartan medoxomil
+1986,olopatadine
+1987,olprinone
+1988,olsalazine
+1989,omapatrilat
+1990,omeprazole
+1992,ondansetron
+1993,opipramol
+1996,orlistat
+1999,orphenadrine
+2002,oteracil
+2004,ouabain
+2006,oxacillin
+2008,oxametacin
+2011,oxandrolone
+2013,oxaprozin
+2014,oxatomide
+2015,oxazepam
+2017,oxcarbazepine
+2026,oxyphencyclimine
+2027,oxprenolol
+2028,oxybutynin
+2029,oxycodone
+2032,oxymetazoline
+2033,oxymetholone
+2034,oxymorphone
+2036,oxyphenbutazone
+2039,oxyphenonium
+2042,oxytocin
+2043,ozagrel
+2044,paclitaxel
+2045,palmidrol
+2046,palonosetron
+2048,pamidronic acid
+2049,aminobenzoic acid
+2050,aminosalicylic acid
+2052,pancuronium
+2054,pantoprazole
+2056,papaverine
+2059,paramethadione
+2063,parecoxib
+2065,pargyline
+2066,paricalcitol
+2068,paroxetine
+2071,pefloxacin
+2073,pemetrexed
+2075,pemoline
+2078,penbutolol
+2080,penfluridol
+2088,pentagastrin
+2090,pentamidine
+2095,pentobarbital
+2096,pentolonium
+2098,pentostatin
+2099,pentoxifylline
+2100,perazine
+2105,pergolide
+2106,perhexiline
+2107,periciazine
+2108,perindopril
+2111,perlapine
+2112,perospirone
+2113,perphenazine
+2114,phenacemide
+2115,phenacetin
+2119,phenazocine
+2120,phenazopyridine
+2121,phencyclidine
+2122,phendimetrazine
+2123,phenelzine
+2126,phenformin
+2130,phenindione
+2131,pheniprazine
+2132,pheniramine
+2133,phenmetrazine
+2134,phenobarbital
+2135,phenolphthalein
+2136,phenoxybenzamine
+2138,phenprocoumon
+2139,phensuximide
+2140,phentermine
+2142,phentolamine
+2143,fenamisal
+2144,phenylalanine
+2145,phenylbutazone
+2146,phenylephrine
+2149,phenylpropanolamine
+2150,phenyltoloxamine
+2152,phenytoin
+2153,phloroglucinol
+2156,oxagrelate
+2159,physostigmine
+2162,picrotoxin
+2163,picrotin
+2165,piketoprofen
+2166,pilocarpine
+2167,pilsicainide
+2168,pimecrolimus
+2169,pimethixene
+2171,pimobendan
+2172,pimozide
+2173,pinacidil
+2176,pindolol
+2179,pioglitazone
+2180,pipamazine
+2181,pipamperone
+2183,pipecuronium
+2186,piperacetazine
+2193,pipotiazine palmitate
+2198,pirarubicin
+2199,pirbuterol
+2200,pirenzepine
+2201,piretanide
+2202,piribedil
+2206,pirlindole
+2207,pirmenol
+2210,piroxicam
+2213,pirprofen
+2214,pitavastatin
+2220,pizotifen
+2228,polythiazide
+2231,pralidoxime
+2232,pralmorelin
+2233,pramipexole
+2236,pramlintide
+2237,pranlukast
+2239,pravastatin
+2240,prazepam
+2241,praziquantel
+2243,prednicarbate
+2245,prednisolone
+2247,prednisolone acetate
+2251,prednisolone tebutate
+2253,prednisone
+2255,pregabalin
+2256,pregnenolone succinate
+2258,prenalterol
+2261,prenylamine
+2263,pridinol
+2265,prilocaine
+2266,primaquine
+2267,primidone
+2268,probenecid
+2269,probucol
+2270,procainamide
+2271,procaine
+2273,procaterol
+2274,prochlorperazine
+2276,procyclidine
+2278,progabide
+2279,progesterone
+2281,proglumide
+2284,promazine
+2285,promegestone
+2286,promethazine
+2291,propafenone
+2293,propantheline
+2294,proparacaine
+2296,propentofylline
+2298,propiomazine
+2299,propiram
+2302,propofol
+2303,propranolol
+2308,propylthiouracil
+2309,propyphenazone
+2311,proquazone
+2313,proscillaridin
+2316,protirelin
+2318,protokylol
+2320,protriptyline
+2326,pseudoephedrine
+2328,pyrazinamide
+2330,pyridostigmine
+2331,mepyramine
+2332,pyrimethamine
+2335,pyrvinium
+2336,quazepam
+2337,quetiapine
+2338,mepacrine
+2340,quinapril
+2342,quinestrol
+2343,quinethazone
+2345,quingestanol acetate
+2346,quinidine
+2350,rabeprazole
+2351,raloxifene
+2352,raltegravir
+2353,raltitrexed
+2354,ramatroban
+2355,ramelteon
+2356,ramipril
+2357,ramosetron
+2358,ranitidine
+2359,ranolazine
+2361,reboxetine
+2362,regadenoson
+2363,remifentanil
+2365,remoxipride
+2366,repaglinide
+2368,reproterol
+2369,rescinnamine
+2370,reserpine
+2372,retinol acetate
+2373,ribavirin
+2377,rifampicin
+2379,rifaximin
+2381,rilmenidine
+2382,riluzole
+2383,rimantadine
+2384,rimexolone
+2387,risedronic acid
+2388,levisoprenaline
+2389,risperidone
+2390,ritodrine
+2391,ritonavir
+2392,rivastigmine
+2393,rizatriptan
+2396,rocuronium
+2397,rofecoxib
+2399,rolitetracycline
+2402,ropinirole
+2403,ropivacaine
+2405,rosiglitazone
+2406,rosuvastatin
+2407,rotigotine
+2408,roxatidine acetate
+2410,roxithromycin
+2413,rupatadine
+2414,ademetionine
+2416,salicylic acid
+2419,salmeterol
+2422,saquinavir
+2423,sarpogrelate
+2424,scopolamine
+2428,secobarbital
+2429,selegiline
+2432,seratrodast
+2433,sermorelin
+2434,sertaconazole
+2435,sertindole
+2436,sertraline
+2437,setastine
+2439,sevoflurane
+2440,sibutramine
+2441,sildenafil
+2443,silymarin
+2445,simvastatin
+2446,sirolimus
+2448,sitagliptin
+2451,sitosterol
+2452,sivelestat
+2457,solifenacin
+2459,sorafenib
+2463,sorivudine
+2464,sotalol
+2466,sparfloxacin
+2469,spiclomazine
+2470,spiperone
+2474,spirapril
+2475,spironolactone
+2477,stanozolol
+2480,stiripentol
+2484,strychnine
+2487,succinic acid
+2489,suxamethonium
+2491,sufentanil
+2492,sulbactam
+2495,sulconazole
+2497,sulfacetamide
+2500,sulfadiazine
+2501,sulfadimethoxine
+2502,sulfadimidine
+2504,sulfaethidole
+2505,sulfaguanidine
+2521,sulfanilamide
+2523,sulfaphenazole
+2525,sulfasalazine
+2526,sulfisomidine
+2527,sulfathiazole
+2528,sulfinpyrazone
+2529,sulfafurazole
+2531,sulfobromophthalein
+2532,sulforidazine
+2533,aldesulfone
+2534,sulindac
+2536,suloctidil
+2537,sulpiride
+2538,sulprostone
+2540,sultiame
+2541,sultopride
+2543,sumatriptan
+2544,sunitinib
+2546,suprofen
+2548,secretin human
+2550,syrosingopine
+2551,tacrine
+2552,tacrolimus
+2553,tadalafil
+2556,talbutal
+2557,talinolol
+2558,talipexole
+2560,taltirelin
+2561,tamoxifen
+2562,tamsulosin
+2563,tandospirone
+2571,tazarotene
+2574,tebipenem pivoxil
+2579,tegaserod
+2580,teicoplanin aglycone
+2581,telithromycin
+2583,telmisartan
+2585,temazepam
+2586,temocapril
+2590,teniposide
+2593,tenofovir disoproxil
+2595,tenoxicam
+2597,terbinafine
+2598,terbutaline
+2599,terconazole
+2600,terfenadine
+2601,terguride
+2603,terodiline
+2605,tertatolol
+2606,testolactone
+2607,testosterone
+2608,testosterone undecanoate
+2609,tetrabenazine
+2610,tetracaine
+2611,tetracycline
+2612,sapropterin
+2616,thalidomide
+2620,theophylline
+2621,thiabendazole
+2624,thiamphenicol
+2626,thiamylal
+2630,thiethylperazine
+2632,thioguanine
+2633,thiopental
+2635,thioproperazine
+2637,thioridazine
+2638,thiotepa
+2639,thiothixene
+2646,levothyroxine
+2648,tiagabine
+2650,tianeptine
+2651,tiapride
+2652,tiaprofenic acid
+2655,tibolone
+2657,ticlopidine
+2663,tilidine
+2666,tiludronic acid
+2672,tinoridine
+2675,tioconazole
+2677,tiotropium bromide
+2679,tiracizine
+2680,tirofiban
+2683,tizanidine
+2684,tobramycin
+2686,tocainide
+2693,tofisopam
+2694,tolazamide
+2695,tolazoline
+2696,tolbutamide
+2697,tolcapone
+2698,tolfenamic acid
+2699,tolmetin
+2701,tolonium
+2702,toloxatone
+2703,tolperisone
+2704,tolrestat
+2705,tolterodine
+2706,topiramate
+2707,topotecan
+2708,torsemide
+2709,toremifene
+2711,tramadol
+2712,trandolapril
+2713,tranexamic acid
+2714,tranilast
+2715,tranylcypromine
+2716,travoprost
+2717,trazodone
+2720,treprostinil
+2722,tretinoin
+2723,tretoquinol
+2725,triamcinolone
+2726,triamcinolone acetonide
+2727,triamcinolone diacetate
+2728,triamterene
+2729,triazolam
+2733,trichlormethiazide
+2734,triclabendazole
+2735,triclofos
+2737,tridihexethyl
+2738,trientine
+2740,trifluoperazine
+2741,trifluperidol
+2742,triflupromazine
+2745,trihexyphenidyl
+2746,trilostane
+2749,alimemazine
+2751,trimethadione
+2752,trimetaphan
+2755,trimethoprim
+2757,trimetrexate
+2758,trimipramine
+2759,trioxsalen
+2761,triparanol
+2762,tripelennamine
+2763,triprolidine
+2767,troglitazone
+2769,troleandomycin
+2774,tropicamide
+2775,tropisetron
+2776,trospium
+2777,trovafloxacin
+2780,tryptophan
+2781,tubocurarine
+2782,tulobuterol
+2784,tyramine
+2786,tyrosine
+2787,ubenimex
+2796,urapidil
+2797,ursodiol
+2799,valdecoxib
+2800,valethamate
+2803,valproic acid
+2805,valrubicin
+2806,valsartan
+2807,vancomycin
+2808,varenicline
+2809,vardenafil
+2810,vasopressin
+2811,vecuronium
+2813,venlafaxine
+2814,veralipride
+2815,verapamil
+2817,vesnarinone
+2818,vidarabine
+2819,vigabatrin
+2820,viloxazine
+2823,vinblastine
+2824,vinburnine
+2825,vincristine
+2826,vindesine
+2827,vinorelbine
+2828,vinpocetine
+2831,retinol
+2832,thiamine
+2834,riboflavin
+2835,nicotinic acid
+2836,pyridoxine
+2838,ergocalciferol
+2840,colecalciferol
+2841,dihydrotachysterol
+2843,phytomenadione
+2845,voglibose
+2846,voriconazole
+2847,warfarin
+2848,xamoterol
+2852,ximelagatran
+2855,zafirlukast
+2856,zalcitabine
+2857,zaleplon
+2859,zanamivir
+2861,zidovudine
+2862,zileuton
+2863,zimeldine
+2865,ziprasidone
+2866,zofenopril
+2868,zoledronic acid
+2869,zolmitriptan
+2870,zolpidem
+2871,zomepirac
+2872,zonisamide
+2873,zopiclone
+2875,zotepine
+2877,zuclopenthixol
+2878,ziconotide
+2949,zotarolimus
+2955,eledoisin
+2956,escin
+2958,gonadorelin
+2959,lypressin
+2960,mifamurtide
+2966,suramin
+2967,terlipressin
+2968,triptorelin
+2974,doxacurium
+2975,histrelin
+2977,caspofungin
+2989,calcitonin (salmon synthetic)
+2990,desirudin
+2994,glucagon
+2995,lepirudin
+2997,somatostatin
+3008,atosiban
+3016,oxybuprocaine
+3018,benzethonium
+3021,bergapten
+3025,bietamiverine
+3032,bithionol
+3042,broxuridine
+3047,bufexamac
+3050,butacaine
+3053,butethamine
+3064,capsaicin
+3067,carbon tetrachloride
+3068,carglumic acid
+3070,articaine
+3082,cetrimonium
+3083,cetylpyridinium
+3094,chloroxylenol
+3096,cholic acid
+3101,cinchophen
+3102,cinromide
+3114,cloxiquine
+3123,cyclomethycaine
+3125,dantron
+3128,deferasirox
+3135,desonide
+3137,dibrompropamidine
+3142,difluprednate
+3153,quinisocaine
+3157,diosmin
+3165,domitroban
+3170,eburnamonine
+3174,eicosapentaenoic acid
+3177,enilconazole
+3178,enoxolone
+3179,ensulizole
+3186,eseridine
+3187,estriol
+3188,estrone
+3194,ethacridine
+3201,kainic acid
+3217,evans blue
+3219,exisulind
+3220,femoxetine
+3224,fendosal
+3225,fenoxazoline
+3229,fumaric acid
+3236,flusalan
+3248,fosfestrol
+3249,fospropofol
+3253,fumagillin
+3256,furtrethonium
+3257,gabexate
+3260,gentisic acid
+3275,hexamidine
+3282,hydroquinone
+3290,oxyquinoline
+3294,iloperidone
+3309,isoconazole
+3312,ivabradine
+3313,khellin
+3317,lenalidomide
+3323,linoleic acid
+3325,lodoxamide
+3326,loflucarban
+3341,mestanolone
+3342,mesterolone
+3356,methyltestosterone
+3366,moxestrol
+3369,naphazoline
+3377,neridronic acid
+3396,octopamine
+3400,oleic acid
+3401,ornithine
+3407,oxetacaine
+3408,oxiconazole
+3413,oxycinchophen
+3424,pentazocine
+3434,phenacaine
+3481,podophyllotoxin
+3482,polyestradiol phosphate
+3483,posaconazole
+3486,practolol
+3487,pramocaine
+3493,propamidine
+3496,propoxycaine
+3502,prucalopride
+3505,homonicotinic acid
+3506,pyridoxal phosphate
+3508,pyrithione
+3511,pyrovalerone
+3514,quercetin
+3520,rapacuronium
+3521,rasagiline
+3524,resorcinol
+3525,revaprazan
+3529,rioprostil
+3531,roflumilast
+3533,ruboxistaurin
+3534,rufinamide
+3535,rutoside
+3536,sabcomeline
+3542,saralasin
+3548,sitaxentan
+3553,stallimycin
+3574,sulmazole
+3577,oxedrine
+3579,talastine
+3580,tamibarotene
+3584,terazosin
+3591,tetryzoline
+3601,thiram
+3604,thyropropic acid
+3607,tioxolone
+3609,tipranavir
+3611,tiratricol
+3613,Vitamin E
+3616,toliprolol
+3617,tolnaftate
+3620,tramazoline
+3630,triclocarban
+3631,triclosan
+3639,uridine triphosphate
+3642,vildagliptin
+3643,vincamine
+3644,vinflunine
+3651,vorozole
+3652,xanomeline
+3658,xylometazoline
+3659,yohimbine
+3661,zolimidine
+3680,azacyclonol
+3686,benzylsulfamide
+3689,bropirimine
+3707,chlorthenoxazine
+3713,ciramadol
+3734,diperodon
+3747,fenethazine
+3770,meprylcaine
+3787,myrtecaine
+3805,parethoxycaine
+3839,tasosartan
+3848,velnacrine
+3851,dexibuprofen
+3855,docosanoic acid
+3862,alitretinoin
+3871,artemisinin
+3875,benzamycin
+3880,benidipine
+3881,benzydamine
+3883,biriperone
+3911,clobetasone butyrate
+3912,clorotepine
+3920,dexamethasone phosphate
+3927,androstanolone
+3931,dolasetron
+3944,etoposide phosphate
+3952,guanabenz
+3959,hydrocortisone butyrate
+3961,ilaprazole
+3972,ivermectin
+3977,kojic acid
+3995,meldonium
+3998,octanoic acid
+4002,niperotidine
+4004,mozavaptan
+4006,oxitriptan
+4050,spaglumic acid
+4055,baicalin
+4061,timolol
+4063,tirilazad
+4072,ascorbic acid
+4074,minodronic acid
+4099,levamlodipine
+4106,sucralfate
+4109,dronabinol
+4110,tolvaptan
+4112,dronedarone
+4113,prasugrel
+4114,saxagliptin
+4115,asenapine
+4117,pralatrexate
+4118,pazopanib
+4119,romidepsin
+4120,dexfosfoserine
+4122,auranofin
+4123,lubiprostone
+4124,vorinostat
+4125,proline
+4127,serine
+4128,valine
+4134,pyridoxal
+4135,lisdexamfetamine
+4137,paliperidone
+4138,gentian violet
+4141,udenafil
+4142,sulfadiazine silver
+4143,darunavir
+4144,sodium lauryl sulfate
+4146,testosterone propionate
+4150,rimonabant
+4151,silodosin
+4153,cabazitaxel
+4157,lercanidipine
+4161,temsirolimus
+4162,dexlansoprazole
+4163,fampridine
+4164,liraglutide
+4165,alcaftadine
+4166,ulipristal
+4167,fingolimod
+4168,lurasidone
+4170,tesamorelin
+4171,eribulin
+4172,boceprevir
+4173,telaprevir
+4174,rilpivirine
+4175,linagliptin
+4176,abiraterone acetate
+4177,gabapentin enacarbil
+4178,vandetanib
+4181,retigabine
+4182,rivaroxaban
+4183,indacaterol
+4184,ticagrelor
+4185,vemurafenib
+4186,icatibant
+4187,crizotinib
+4188,deferiprone
+4189,hydroxyprogesterone caproate
+4190,ruxolitinib
+4191,fesoterodine
+4192,tafamidis
+4196,cyanocobalamin
+4197,vitamin A palmitate
+4199,potassium chloride
+4203,sodium acetate
+4207,lithium carbonate
+4209,prazosin
+4211,acetic acid
+4213,hydrocortisone acetate
+4218,methyldopate
+4219,sodium phosphate
+4221,mequinol
+4223,vilazodone
+4225,axitinib
+4226,ingenol mebutate
+4227,vismodegib
+4228,ivacaftor
+4229,tafluprost
+4230,Ioflupane I-123
+4234,peginesatide
+4242,avobenzone
+4247,neomycin
+4248,pyrithione zinc
+4257,bismuth subsalicylate
+4258,thymol
+4260,sulfur
+4264,carbamide
+4265,gentamicin
+4266,phenol
+4267,arbutin
+4276,piperonyl butoxide
+4280,tocofersolan
+4283,tapentadol
+4285,Florbetapir F-18
+4289,doconexent
+4296,potassium iodide
+4298,apixaban
+4299,cobicistat
+4301,Flutemetamol (18F)
+4302,glycopyrronium bromide
+4303,eslicarbazepine acetate
+4304,dapagliflozin
+4305,avanafil
+4308,lasofoxifene
+4310,lacosamide
+4314,aceclidine
+4317,euflavine
+4318,afatinib
+4322,azilsartan medoxomil
+4326,laropiprant
+4329,pasireotide
+4334,bazedoxifene
+4336,amifampridine
+4337,ambrisentan
+4340,alogliptin
+4342,zucapsaicin
+4344,zinc chloride
+4349,aurothioglucose
+4353,bilastine
+4358,arginine glutamate
+4359,bosutinib
+4360,cetrimide
+4361,chenodiol
+4365,vernakalant
+4366,voclosporin
+4373,sodium benzoate
+4374,lorcaserin
+4376,dequalinium
+4379,degarelix
+4380,desvenlafaxine
+4381,dapoxetine
+4382,mirabegron
+4390,choline theophyllinate
+4392,cisplatin
+4397,clopenthixol
+4399,eltrombopag
+4401,casopitant
+4410,plerixafor
+4411,dexchlorpheniramine
+4414,dibutylphthalate
+4420,dihydroergocryptine
+4425,colistin
+4426,bufylline
+4427,calcitonin human
+4451,prednisolone sodium phosphate
+4452,clobetasol propionate
+4454,testosterone cypionate
+4456,hydrocortisone succinate
+4458,sulfisoxazole acetyl
+4466,eosin
+4470,fosaprepitant
+4474,trisodium citrate dihydrate
+4477,sodium citrate
+4482,corbadrine
+4483,carfilzomib
+4484,aclidinium bromide
+4485,diflorasone diacetate
+4493,alclometasone dipropionate
+4496,haloperidol decanoate
+4497,estradiol acetate
+4498,paliperidone palmitate
+4501,armodafinil
+4504,hydrocortisone valerate
+4505,choline fenofibrate
+4507,halcinonide
+4508,racepinefrine
+4512,lithium citrate
+4514,teriparatide
+4516,tetracosactide
+4523,quinine
+4536,fenbendazole
+4554,fluticasone furoate
+4562,gepirone
+4566,sodium oxybate
+4568,hydrochloric acid
+4569,hydrocortisone probutate
+4573,iclaprim
+4577,iobenguane (131I)
+4588,linopirdine
+4601,diosmetin
+4605,tonzonium
+4606,clocortolone pivalate
+4608,trypan blue
+4609,testosterone enantate
+4611,stearic acid
+4612,protocatechualdehyde
+4613,polydatin
+4616,methylnaltrexone
+4618,linolenic acid
+4619,levomenol
+4621,levomefolic acid
+4622,linaclotide
+4624,phenylacetic acid
+4627,sincalide
+4628,enzalutamide
+4630,sodium pyrophosphate
+4631,nitroprusside
+4633,trabectedin
+4634,teriflunomide
+4637,rose bengal
+4641,levmetamfetamine
+4642,dodecanoic acid
+4647,fluorometholone acetate
+4648,eugenol
+4654,regorafenib
+4659,metamizole
+4663,benzoin
+4664,benzoic acid
+4667,betamethasone phosphate
+4671,metizoline
+4673,nalfurafine
+4676,obidoxime
+4682,panobinostat
+4683,paraoxon
+4684,perampanel
+4690,pleconaril
+4696,remikiren
+4702,esatenolol
+4704,semustine
+4706,sodium aurothiomalate
+4710,somatorelin
+4713,tofacitinib
+4715,cabozantinib
+4716,ponatinib
+4718,teduglutide
+4719,daunorubicinol
+4721,lomitapide
+4723,succinimide
+4727,tacalcitol
+4728,tenidap
+4731,thiocolchicoside
+4732,thioctic acid
+4733,thiomersal
+4741,bedaquiline
+4742,bleomycin
+4744,crofelemer
+4746,pomalidomide
+4747,mipomersen
+4749,ospemifene
+4752,levobetaxolol
+4757,dimethyl fumarate
+4758,canagliflozin
+4773,ethyl hydroxybenzoate
+4778,ridaforolimus
+4794,gramicidin
+4797,sodium nitrite
+4799,vilanterol
+4801,dabrafenib
+4802,trametinib
+4804,palifermin
+4805,dolutegravir
+4806,vortioxetine
+4807,riociguat
+4808,ipidacrine
+4809,macitentan
+4810,ibrutinib
+4812,simeprevir
+4814,olodaterol
+4815,lixisenatide
+4816,umeclidinium
+4817,rifamycin
+4818,florbetaben F18
+4820,tasimelteon
+4821,seractide
+4823,peramivir
+4824,etilefrine pivalate
+4826,metreleptin
+4829,apremilast
+4830,empagliflozin
+4832,naloxegol
+4833,gemigliptin
+4834,eliglustat
+4836,afamelanotide
+4839,aprotinin
+4846,ecallantide
+4848,somatropin
+4855,conjugated estrogens
+4856,sodium thiosalicylate
+4857,estrone sulphate
+4858,corticorelin
+4863,phenibut
+4864,levomilnacipran
+4865,mebanazine
+4866,ceritinib
+4867,dexrabeprazole
+4870,vorapaxar
+4872,ataluren
+4873,tedizolid phosphate
+4875,daclatasvir
+4876,belinostat
+4877,tavaborole
+4878,idelalisib
+4879,enoxaparin sodium
+4881,suvorexant
+4882,istradefylline
+4885,dulaglutide
+4886,cetilistat
+4888,topiroxostat
+4890,ipragliflozin
+4891,luseogliflozin
+4892,tofogliflozin
+4893,tipiracil
+4894,iguratimod
+4895,teneligliptin
+4896,anagliptin
+4897,edoxaban
+4898,netupitant
+4900,diquafosol
+4901,insulin glargine
+4902,imidafenacin
+4903,nintedanib
+4904,adalimumab
+4905,pegaptanib
+4906,fimasartan
+4907,olaparib
+4908,acotiamide
+4909,alemtuzumab
+4910,felypressin
+4914,dasabuvir
+4915,blinatumomab
+4916,aflibercept
+4917,ramucirumab
+4921,safinamide
+4923,nivolumab
+4924,pembrolizumab
+4925,becaplermin
+4927,albiglutide
+4928,follitropin
+4929,lutropin alfa
+4930,thyrotropin alfa
+4931,corticotropin
+4933,tocilizumab
+4934,secukinumab
+4936,parathyroid hormone
+4937,alectinib
+4938,ripasudil
+4939,vaniprevir
+4940,basiliximab
+4941,palbociclib
+4942,lenvatinib
+4943,arformoterol
+4945,pancreozymin
+4947,isavuconazonium
+4949,belimumab
+4950,abciximab
+4951,ofatumumab
+4952,canakinumab
+4953,daclizumab
+4954,cetuximab
+4955,panitumumab
+4956,bevacizumab
+4957,pertuzumab
+4958,ipilimumab
+4959,efalizumab
+4960,insulin degludec
+4964,brentuximab vedotin
+4965,denosumab
+4966,ustekinumab
+4967,golimumab
+4968,certolizumab pegol
+4969,eculizumab
+4970,natalizumab
+4971,ranibizumab
+4972,omalizumab
+4973,tucidinostat
+4974,infliximab
+4975,rituximab
+4976,triamcinolone hexacetonide
+4977,siltuximab
+4978,etanercept
+4979,trastuzumab
+4980,gemtuzumab ozogamicin
+4981,insulin aspart
+4982,vedolizumab
+4983,obinutuzumab
+4984,ibritumomab tiuxetan
+4985,insulin detemir
+4986,pegfilgrastim
+4987,filgrastim
+4988,deoxycholic acid
+4990,trastuzumab emtansine
+4991,lipegfilgrastim
+4993,vonoprazan
+4995,epoetin alfa
+4996,romiplostim
+5000,evolocumab
+5001,eluxadoline
+5002,insulin lispro
+5003,insulin human
+5005,mirodenafil
+5006,cangrelor
+5007,epoetin theta
+5008,sonidegib
+5009,mecasermin
+5010,lumacaftor
+5011,aldesleukin
+5012,sacubitril
+5013,trelagliptin
+5014,brexpiprazole
+5015,pegvisomant
+5016,alirocumab
+5017,anakinra
+5022,flibanserin
+5025,sargramostim
+5026,oprelvekin
+5027,rolapitant
+5031,mogamulizumab
+5037,cariprazine
+5039,tannic acid
+5042,somatrem
+5044,reteplase
+5046,cobimetinib
+5047,saroglitazar
+5048,pitolisant
+5052,aripiprazole lauroxil
+5054,omarigliptin
+5057,insulin glulisine
+5059,lusutrombopag
+5060,esflurbiprofen
+5061,mepolizumab
+5062,osimertinib
+5063,daratumumab
+5064,climbazole
+5066,tenecteplase
+5067,ixazomib
+5068,brivaracetam
+5071,necitumumab
+5072,elotuzumab
+5075,lesinurad
+5077,selexipag
+5078,lobeglitazone
+5083,ixekizumab
+5087,denileukin diftitox
+5088,alefacept
+5089,abatacept
+5091,belatacept
+5093,reslizumab
+5105,rilonacept
+5109,urokinase
+5110,migalastat
+5118,chromic chloride
+5133,venetoclax
+5137,peginterferon beta-1a
+5139,interferon beta-1a
+5140,interferon beta-1b
+5141,alteplase
+5142,pimavanserin
+5143,opicapone
+5144,gluconolactone
+5149,choriogonadotropin alfa
+5151,atezolizumab
+5155,obeticholic acid
+5157,darbepoetin alfa
+5158,peginterferon alfa-2a
+5160,epoetin beta
+5164,peginterferon alfa-2b
+5165,methoxy polyethylene glycol-epoetin beta
+5167,lenograstim
+5169,eldecalcitol
+5170,epoetin zeta
+5174,lifitegrast
+5177,muromonab-CD3
+5179,brodalumab
+5181,etelcalcetide
+5182,eteplirsen
+5183,olaratumab
+5185,gallium (68Ga) edotreotide
+5188,radotinib
+5201,crisaborole
+5202,baricitinib
+5203,rucaparib
+5207,nusinersen
+5208,plecanatide
+5209,icotinib
+5210,olmutinib
+5211,apatinib
+5214,telotristat ethyl
+5215,beclabuvir
+5217,cytisine
+5218,ribociclib
+5220,naldemedine
+5221,avelumab
+5222,niraparib
+5223,ocrelizumab
+5224,dupilumab
+5226,deutetrabenazine
+5227,valbenazine
+5229,forodesine
+5231,midostaurin
+5232,abaloparatide
+5233,brigatinib
+5234,durvalumab
+5235,cenegermin
+5237,sarilumab
+5239,evogliptin
+5240,polmacoxib
+5241,betrixaban
+5245,corifollitropin alfa
+5246,guselkumab
+5247,inotuzumab ozogamicin
+5248,pemafibrate
+5250,imrecoxib
+5251,enasidenib
+5252,neratinib
+5256,copanlisib
+5257,butylphthalide
+5258,tivozanib
+5259,abemaciclib
+5260,acalabrutinib
+5261,latanoprostene bunod
+5263,benralizumab
+5267,semaglutide
+5268,emicizumab
+5269,netarsudil
+5270,ertugliflozin
+5271,macimorelin
+5272,angiotensin II
+5274,bictegravir
+5275,lutetium (177Lu) oxodotreotide
+5276,tezacaftor
+5277,elobixibat
+5278,apalutamide
+5279,ibalizumab
+5280,fostamatinib
+5281,tildrakizumab
+5282,burosumab
+5283,fosnetupitant
+5284,erenumab
+5285,avatrombopag
+5288,cannabidiol
+5289,encorafenib
+5290,binimetinib
+5292,ivosidenib
+5293,elagolix
+5296,duvelisib
+5297,dacomitinib
+5300,talazoparib tosylate
+5302,lorlatinib
+5303,revefenacin
+5304,glasdegib
+5305,larotrectinib
+5306,gilteritinib
+5307,evocalcet
+5308,caplacizumab
+5309,lanadelumab
+5311,vibegron
+5312,omidenepag isopropyl
+5313,patisiran
+5314,moxetumomab pasudotox
+5315,fremanezumab
+5316,galcanezumab
+5317,cemiplimab
+5319,inotersen
+5320,emapalumab
+5322,ravulizumab
+5323,tagraxofusp
+5324,brexanolone
+5325,solriamfetol
+5326,siponimod
+5327,erdafitinib
+5328,alpelisib
+5329,bremelanotide
+5330,selinexor
+5331,prabotulinumtoxinA
+5333,polatuzumab vedotin
+5334,darolutamide
+5335,volanesorsen
+5337,risankizumab
+5338,ropeginterferon alfa-2b
+5339,sotagliflozin
+5341,quizartinib
+5343,pexidartinib
+5345,entrectinib
+5346,upadacitinib
+5347,fedratinib
+5348,lefamulin
+5349,tenapanor
+5350,trifarotene
+5351,lasmiditan
+5353,zanubrutinib
+5354,givosiran
+5355,cenobamate
+5356,voxelotor
+5357,golodirsen
+5358,lumateperone
+5359,brilliant Blue G
+5360,lemborexant
+5361,ubrogepant
+5362,romosozumab
+5363,brolucizumab
+5364,luspatercept
+5365,crizanlizumab
+5366,enfortumab vedotin
+5367,trastuzumab deruxtecan
+5368,botulinum toxin type A
+5371,roxadustat
+5372,elexacaftor
+5375,cepharanthine
+5378,mefuparib
+5379,avapritinib
+5380,tazemetostat
+5381,rimegepant
+5382,bempedoic acid
+5383,ozanimod
+5384,osilodrostat
+5385,isatuximab
+5386,eptinezumab
+5387,teprotumumab
+5388,selumetinib
+5389,tucatinib
+5390,pemigatinib
+5391,sacituzumab govitecan
+5392,capmatinib
+5393,selpercatinib
+5394,ripretinib
+5395,fluoroestradiol F 18
+5396,flortaucipir F 18
+5397,inebilizumab
+5400,remimazolam
+5401,fostemsavir
+5402,cedazuridine
+5403,abametapir
+5404,tafasitamab
+5405,belantamab mafodotin
+5406,oliceridine
+5408,viltolarsen
+5409,satralizumab
+5410,clascoterone
+5411,copper dotatate Cu-64
+5412,pralsetinib
+5413,somapacitan
+5414,lonafarnib
+5415,lumasiran
+5416,setmelanotide
+5417,bulevirtide
+5418,imlifidase
+5419,filgotinib
+5420,vadadustat
+5421,daprodustat
+5423,tirabrutinib hydrochloride
+5424,tepotinib
+5425,dotinurad
+5426,delgocitinib
+5427,enarodustat
+5428,sofpironium bromide
+5429,gallium (68Ga) gozetotide
+5430,berotralstat
+5431,tirbanibulin
+5432,relugolix
+5434,margetuximab
+5436,atoltivimab
+5438,odesivimab
+5439,vericiguat
+5441,umbralisib
+5442,trilaciclib
+5443,casimersen
+5444,fosdenopterin
+5446,ponesimod
+5447,dasiglucagon
+5449,evinacumab
+5450,estetrol
+5451,dostarlimab
+5452,loncastuximab tesirine
+5457,pegcetacoplan
+5458,piflufolastat F-18
+5459,infigratinib
+5460,samidorphan
+5461,sotorasib
+5463,amivantamab
+5464,aducanumab
+5465,finerenone
+5467,belumosudil
+5468,odevixibat
+5469,belzutifan
+5470,difelikefalin
+5471,mobocertinib
+5472,atogepant
+5473,maralixibat hydrochloride
+5474,anifrolumab
+5476,lonapegsomatropin
+5477,tisotumab vedotin
+5478,bimekizumab
+5479,tralokinumab
+5480,vosoritide
+5481,peficitinib
+5482,upacicalcet
+5484,teceleukin
+5486,molidustat
+5487,anamorelin
+5488,pabinafusp alfa
+5489,diclofenac etalhyaluronate sodium
+5490,esaxerenone
+5491,mirogabalin
+5493,daridorexant
+5494,avacopan
+5495,asciminib
+5496,maribavir
+5497,pafolacianine
+5498,inclisiran
+5499,efgartigimod alfa
+5500,tezepelumab
+5502,diroximel fumarate
+5503,difamilast
+5504,abrocitinib
+5506,mitapivat
+5507,pacritinib
+5508,ganaxolone
+5509,lutetium (177Lu) vipivotide tetraxetan
+5510,oteseconazole
+5511,mavacamten
+5512,sutimlimab
+5513,tebentafusp
+5514,relatlimab
+5515,faricimab
+5516,tirzepatide
+5517,somatrogon
+5518,clazosentan
+5519,gefapixant
+5520,nirmatrelvir
+5521,tapinarof
+5522,2-mercaptobenzothiazole
+5523,dichlorvos
+5526,diprenorphine
+5527,dirlotapide
+5535,amitraz
+5537,etorphine
+5542,firocoxib
+5545,flunixin
+5546,fluprostenol
+5552,grapiprant
+5553,halofuginone
+5557,amprolium
+5559,imidacloprid
+5560,imidocarb
+5571,maduramicin
+5574,atipamezole
+5578,mibolerone
+5588,norgestomet
+5589,oclacitinib
+5590,azaperone
+5594,oxfendazole
+5597,phenothiazine
+5611,ractopamine
+5624,tepoxalin
+5628,tiamulin
+5634,toceranib
+5635,toluene
+5644,xylazine
+5645,zilpaterol
+5650,potassium bromide
+5653,verdinexor
+5656,capromorelin
+5665,cloprostenol
+5667,coumafos
+5672,deracoxib
+5673,deslorelin
+5676,spesolimab
+5677,deucravacitinib
+5678,eflapegrastim
+5679,taurursodiol
+5680,futibatinib
+5686,pimitespib
+5687,ferric derisomaltose
+5688,carotegrast methyl
+5689,nemolizumab
+5690,tremelimumab
+5691,mirvetuximab soravtansine
+5692,teplizumab
+5693,olutasidenib
+5694,adagrasib
+5697,ublituximab
+5699,vutrisiran
+5700,mosunetuzumab
+5701,linzagolix
+5706,teclistamab
+5708,bexagliflozin
+5709,pirtobrutinib
+5710,elacestrant
+5711,sparsentan
+5712,omaveloxolone
+5713,zavegepant
+5715,leniolisib
+5717,lecanemab
+5719,retifanlimab
+5721,cipaglucosidase alfa
+5722,mirikizumab
+5723,ozoralizumab
+5724,valemetostat
+5728,ritlecitinib
+5729,fezolinetant
+5732,flotufolastat f-18 gallium
+5733,tofersen
+5734,epcoritamab
+5735,rozanolixizumab
+5736,glofitamab
+5737,palovarotene
+5738,zuranolone
+5739,avacincaptad pegol
+5740,pozelimab
+5741,elranatamab
+5742,talquetamab
+5743,cantharidin
+5744,motixafortide
+5745,momelotinib
+5746,nedosiran
+5747,etrasimod
+5748,zilucoplan
+5749,vamorolone
+5750,fruquintinib
+5751,repotrectinib
+5752,capivasertib
+5753,nirogacestat
+5754,iptacopan
+5755,eplontersen
+5756,efbemalenograstim alfa
+5757,toripalimab
+5758,tislelizumab
+5759,lebrikizumab
+5760,concizumab
+5761,vilobelimab
+5762,datopotamab deruxtecan
+5763,suzetrigine
+5764,vimseltinib
+5765,gepotidacin
+5766,fitusiran
+5767,atrasentan
+5768,penpulimab
+5769,nipocalimab
+5770,avutometinib
+5771,defactinib
+5772,telisotuzumab vedotin
+5773,acoltremon
+5775,taletrectinib
+5776,garadacimab
+5777,linvoseltamab
+5778,sunvozertinib
+5779,sebetralstat
+5780,dordaviprone
+5781,zongertinib
+5782,vornorexant
+5783,imlunestrant
+5784,paltusotine
+5785,nerandomilast
+5788,ziftomenib
+5790,sevabertinib
+5791,brensocatib
+5792,etripamil
+5794,lerodalcibep-liga
+5795,motugivatrep
+5797,rilzabrutinib
+5798,remibrutinib
+5799,depemokimab-ulaa
+5800,aficamten
+5801,sepiapterin
+5802,narsoplimab-wuug
+5803,tradipitant
+5804,elinzanetant
+5805,sepetaprost
+5807,serplulimab
+5808,mirdametinib
+5810,letibotulinumtoxina
+5811,resmetirom
+5812,aprocitentan
+5813,givinostat
+5814,crovalimab-akkz
+5815,sotatercept-csrk
+5816,danicopan
+5817,zenocutuzumab
+5819,tovorafenib
+5820,mavorixafor
+5821,tarlatamab
+5822,insulin icodec
+5823,imetelstat
+5824,elafibranor
+5825,gumarontinib
+5826,ensifentrine
+5827,donanemab-azbt
+5828,deuruxolitinib
+5829,vorasidenib
+5830,seladelpar
+5831,axatilimab-csfr
+5832,lazertinib
+5833,odronextamab
+5834,palopegteriparatide
+5835,tasurgratinib
+5836,inavolisib
+5837,zolbetuximab-clzb
+5839,marstacimab-hncq
+5840,revumenib
+5841,zanidatamab-hrii
+5842,acoramidis
+5843,cosibelimab-ipdl
+5844,crinecerfont
+5845,ensartinib
+5846,olezarsen
+5847,vanzacaftor
+5848,deutivacaftor
+5849,sugemalimab
+5850,efanesoctocog alfa
+5851,cinaxadamtase alfa
+5853,catumaxomab
+5855,beremagene geperpavec
+5861,flurpiridaz F-18
+5862,sibeprenlimab-szsi
