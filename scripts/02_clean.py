@@ -48,6 +48,17 @@ def mode_or_na(s):
     return s.mode().iloc[0] if len(s) else pd.NA
 
 
+def first_val(s):
+    """Prende il primo valore non-nullo, e se contiene '|' ne estrae solo la prima parte."""
+    s = s.dropna()
+    if len(s) == 0:
+        return pd.NA
+    v = s.iloc[0]
+    if isinstance(v, str) and "|" in v:
+        v = v.split("|")[0].strip()
+    return v if v else pd.NA
+
+
 def save(df, name):
     df.to_csv(CLEAN / f"{name}.csv", index=False)
     print(f"  {name:<16} {len(df):>7} righe")
@@ -109,11 +120,13 @@ print(f"  STRUCT_ID con piu' nomi diversi: {(d_names['nunique'] > 1).sum()}")
 drug_t = d_names["first"].rename("drug_name").reset_index()
 
 # --- info sul bersaglio (una riga per accession)
+# first_val gestisce le celle che contengono piu' valori separati da '|'
+# (es. TDL = "Tclin|Tclin|Tchem") estraendo solo il primo valore valido
 targets = drug.groupby("acc").agg(
     target_name=("TARGET_NAME", "first"),
-    swissprot=("SWISSPROT", "first"),
-    target_class=("TARGET_CLASS", "first"),
-    tdl=("TDL", "first"),
+    swissprot=("SWISSPROT", first_val),
+    target_class=("TARGET_CLASS", first_val),
+    tdl=("TDL", first_val),
 )
 
 # --- protein = UniProt + "stub" per le accession DrugCentral assenti in UniProt
@@ -237,12 +250,12 @@ intogen_driver = ig[
 
 # ---------------------------------------------- controlli lunghezza vs schema
 LIMITS = [
-    (protein, "accession", 10), (protein, "entry_name", 30), (protein, "protein_name", 500),
+    (protein, "accession", 15), (protein, "entry_name", 30),
     (protein, "target_class", 50), (protein, "tdl", 10), (gene_symbol, "symbol", 50),
     (drug_t, "drug_name", 255), (drug_target, "action_type", 50),
     (drug_target, "moa_source", 50), (activity, "act_type", 20), (activity, "relation", 5),
     (activity, "act_source", 50), (intogen_driver, "methods", 255),
-    (intogen_driver, "transcript", 20), (cohort, "cohort", 60), (cohort, "cancer_type", 20),
+    (intogen_driver, "transcript", 20), (cohort, "cohort", 80), (cohort, "cancer_type", 30),
 ]
 print("\nControllo lunghezze rispetto a schema.sql:")
 problems = 0
@@ -253,11 +266,35 @@ for df, col, limit in LIMITS:
         print(f"  ATTENZIONE {col}: max {longest} > VARCHAR({limit})")
 print("  tutto ok" if not problems else "  -> allarga i VARCHAR indicati in schema.sql")
 
-# ---------------------------------------------------------------- 4. scrittura
-print("\n[4/4] Scrittura in data/clean/")
+# --------------------------------------------------------------- 4. Approvazioni
+print("\n[4/5] Approvazioni FDA / EMA / PMDA")
+approval_rows = []
+for agency, fname in [("FDA", "FDA_Approved.csv"),
+                      ("EMA", "EMA_Approved.csv"),
+                      ("PMDA", "PMDA_Approved.csv")]:
+    fpath = RAW / "drugcentral" / fname
+    if fpath.exists():
+        af = pd.read_csv(fpath, header=None, names=["struct_id", "drug_name"], dtype=str)
+        af["struct_id"] = af["struct_id"].astype(int)
+        # conserva solo i farmaci presenti nella tabella drug
+        af = af[af["struct_id"].isin(drug_t["struct_id"])]
+        af["agency"] = agency
+        approval_rows.append(af[["struct_id", "agency"]])
+        print(f"  {agency}: {len(af)} farmaci approvati presenti nel DB")
+    else:
+        print(f"  {agency}: file non trovato ({fname}), saltato")
+
+if approval_rows:
+    drug_approval = pd.concat(approval_rows, ignore_index=True).drop_duplicates()
+else:
+    drug_approval = pd.DataFrame(columns=["struct_id", "agency"])
+
+# ---------------------------------------------------------------- 5. scrittura
+print("\n[5/5] Scrittura in data/clean/")
 save(protein, "protein")
 save(gene_symbol, "gene_symbol")
 save(drug_t, "drug")
+save(drug_approval, "drug_approval")
 save(drug_target, "drug_target")
 save(activity, "activity")
 save(cohort, "cohort")
@@ -266,3 +303,10 @@ save(intogen_driver, "intogen_driver")
 with_drug = set(intogen_driver["accession"].dropna()) & set(drug_target["accession"])
 print(f"\nGeni driver IntOGen con almeno un farmaco in DrugCentral: "
       f"{intogen_driver[intogen_driver['accession'].isin(with_drug)]['symbol'].nunique()}")
+
+if len(drug_approval):
+    approved_ids = set(drug_approval["struct_id"])
+    driver_drugs = set(drug_target[drug_target["accession"].isin(
+        intogen_driver["accession"].dropna())]["struct_id"])
+    print(f"Di cui con farmaci approvati (FDA/EMA/PMDA): "
+          f"{len(driver_drugs & approved_ids)} farmaci su {len(driver_drugs)} totali")

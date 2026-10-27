@@ -1,8 +1,6 @@
 # Progetto IntOGen – DrugCentral
 
-## In poche parole
-
-Questo progetto costruisce un **database** che mette in collegamento due mondi:
+Questo progetto costruisce un **database relazionale** che mette in collegamento due mondi:
 
 1. **I geni che causano il cancro** (dati IntOGen)
 2. **I farmaci che agiscono sulle proteine** prodotte da quei geni (dati DrugCentral)
@@ -22,7 +20,7 @@ Gene driver ──► Proteina (UniProt accession) ◄── Farmaco
 
 ---
 
-## Cosa c'è in ogni cartella
+## Struttura del progetto
 
 ```
 Project_intogen_drugcentral/
@@ -30,13 +28,14 @@ Project_intogen_drugcentral/
 ├── data/
 │   ├── raw/                 ← dati originali, così come scaricati
 │   │   ├── intogen/         ← file di IntOGen (geni driver)
-│   │   ├── drugcentral/     ← file di DrugCentral (farmaci e bersagli)
+│   │   ├── drugcentral/     ← file di DrugCentral (interazioni e farmaci approvati)
 │   │   └── uniprot/         ← file di UniProt (anagrafica proteine)
 │   │
-│   └── clean/               ← dati puliti, pronti per il database
+│   └── clean/               ← dati puliti, pronti per il database (8 CSV)
 │       ├── protein.csv
 │       ├── gene_symbol.csv
 │       ├── drug.csv
+│       ├── drug_approval.csv
 │       ├── drug_target.csv
 │       ├── activity.csv
 │       ├── cohort.csv
@@ -44,12 +43,13 @@ Project_intogen_drugcentral/
 │
 ├── scripts/
 │   ├── 01_inspect.py        ← esplora i dati grezzi (non modifica nulla)
-│   └── 02_clean.py          ← pulisce i dati e produce i CSV in data/clean/
+│   └── 02_clean.py          ← pulisce i dati e produce gli 8 CSV in data/clean/
 │
-├── sql/                     ← (da creare) schema e query del database
+├── sql/
+│   └── schema.sql           ← schema DDL MySQL (8 tabelle, vincoli e indici)
 │
 └── docs/
-    └── README.md            ← questo file
+    └── README.md            ← documentazione del progetto
 ```
 
 ---
@@ -74,17 +74,11 @@ Ogni riga dice: *"Il gene X è stato trovato come driver nel dataset Y
 | `SYMBOL` | Il nome del gene (es. TP53, KRAS, BRAF) |
 | `COHORT` | Il nome del dataset di pazienti analizzato |
 | `CANCER_TYPE` | Il tipo di tumore (es. BRCA = seno, LUAD = polmone) |
-| `ROLE` | Il ruolo del gene: **Act** (acceleratore) o **LoF** (freno rotto) |
+| `ROLE` | Il ruolo del gene: **Act** (acceleratore/oncogene) o **LoF** (freno rotto/oncosoppressore) |
 | `MUTATIONS` | Quante mutazioni sono state trovate |
 | `SAMPLES` | In quanti pazienti sono state trovate |
-| `QVALUE_COMBINATION` | Un numero statistico: più è vicino a zero, più siamo sicuri che il gene è davvero driver |
+| `QVALUE_COMBINATION` | Valore statistico combinato: più è vicino a zero, maggiore è la confidenza |
 | `METHODS` | Quali algoritmi bioinformatici hanno identificato il gene come driver |
-
-<!-- [APPROFONDIMENTO] Ruolo biologico dei geni driver: differenza tra oncogeni (Act)
-     e tumor suppressor (LoF), con esempi concreti (TP53, KRAS, BRAF).
-     Spiegare perché questa distinzione conta per la scelta dei farmaci:
-     un oncogene iperattivo si può "spegnere" con un inibitore,
-     un tumor suppressor rotto è molto più difficile da riparare. -->
 
 **Numeri chiave**:
 - 633 geni driver unici
@@ -94,54 +88,41 @@ Ogni riga dice: *"Il gene X è stato trovato come driver nel dataset Y
 
 ---
 
-### 2. DrugCentral — I farmaci e i loro bersagli
+### 2. DrugCentral — I farmaci, bersagli e approvazioni
 
 **Cos'è DrugCentral**: un database pubblico che raccoglie informazioni su farmaci
 (approvati e in sperimentazione) e sulle proteine su cui agiscono.
 
-**File**: `drug.target.interaction.tsv` — 22 364 righe, 20 colonne.
+**File principali**:
+- `drug.target.interaction.tsv` — 22 364 righe, 20 colonne (interazioni farmaco-bersaglio).
+- `FDA_Approved.csv`, `EMA_Approved.csv`, `PMDA_Approved.csv` — liste ufficiali di farmaci approvati dai principali enti regolatori mondiali (FDA per gli USA, EMA per l'Europa, PMDA per il Giappone).
 
-Ogni riga dice: *"Il farmaco X si lega alla proteina Y con una certa forza
+Ogni riga di interazione dice: *"Il farmaco X si lega alla proteina Y con una certa forza
 e produce un certo effetto"*.
 
-**Colonne principali**:
+**Colonne principali dell'interazione**:
 
 | Colonna | Cosa significa |
 |---------|----------------|
 | `DRUG_NAME` | Nome del farmaco (es. imatinib, nivolumab) |
-| `STRUCT_ID` | Codice numerico univoco del farmaco |
+| `STRUCT_ID` | Codice numerico univoco del farmaco in DrugCentral |
 | `TARGET_NAME` | Nome della proteina bersaglio |
 | `ACCESSION` | Codice UniProt della proteina bersaglio |
 | `GENE` | Gene che codifica la proteina bersaglio |
-| `ACTION_TYPE` | Come il farmaco agisce: inibitore, agonista, antagonista, ecc. |
-| `ACT_VALUE` | Quanto è potente il farmaco (un numero più alto = farmaco più forte) |
-| `ACT_TYPE` | Che tipo di misura è (IC50, Ki, Kd, ecc.) |
-| `MOA` | Se questa interazione è il *meccanismo d'azione* principale del farmaco (1 = sì) |
-| `TDL` | Quanto è studiata la proteina bersaglio (Tclin → Tdark, dal più al meno conosciuto) |
+| `ACTION_TYPE` | Meccanismo: inibitore, agonista, antagonista, modulatore, ecc. |
+| `ACT_VALUE` | Potenza del farmaco (es. pIC50, pKi in scala -log10) |
+| `ACT_TYPE` | Tipo di misura (IC50, Ki, Kd, EC50, ecc.) |
+| `MOA` | Flag meccanismo d'azione principale del farmaco (1 = sì, 0 = no) |
+| `TDL` | Target Development Level (Tclin → Tchem → Tbio → Tdark) |
 | `TARGET_CLASS` | Famiglia della proteina (GPCR, Chinasi, Canale ionico, Enzima, ecc.) |
 | `ORGANISM` | Organismo della proteina bersaglio (Homo sapiens, Mus musculus, ecc.) |
 
-<!-- [APPROFONDIMENTO] Spiegare il significato di ACTION_TYPE con esempi concreti:
-     - INHIBITOR: blocca la proteina (es. imatinib blocca BCR-ABL)
-     - AGONIST: attiva il recettore (es. morfina attiva il recettore mu-oppioide)
-     - ANTAGONIST: si lega senza attivare e impedisce al segnale naturale di agire
-     - BLOCKER: chiude fisicamente un canale ionico
-     Spiegare anche i livelli TDL (Tclin/Tchem/Tbio/Tdark) e perché
-     un gene driver Tdark è un'opportunità di ricerca. -->
-
-<!-- [APPROFONDIMENTO] Spiegare le misure di potenza dei farmaci (IC50, Ki, Kd):
-     cosa significano concretamente, perché usiamo la scala logaritmica,
-     e come si interpreta un valore di 9 vs un valore di 5. -->
-
 **Numeri chiave**:
 - 22 364 interazioni totali (tutti gli organismi)
-- 16 926 interazioni umane (dopo il filtro a Homo sapiens)
-- 2 632 farmaci unici
-- Le classi di bersagli più rappresentate: GPCR (6 543), Enzimi (5 653), Chinasi (4 802)
-
-Nella cartella `data/raw/drugcentral/` ci sono anche dei file aggiuntivi
-con le liste di farmaci approvati dalle agenzie regolatorie (FDA, EMA, PMDA).
-Per ora non sono usati, ma potranno essere integrati in futuro.
+- 16 926 interazioni umane filtrate (`Homo sapiens`)
+- 2 632 farmaci unici associati a bersagli umani
+- Classi di bersagli più frequenti: GPCR (6 543), Enzimi (5 653), Chinasi (4 802)
+- Farmaci approvati integrati: 1 705 FDA, 356 EMA, 340 PMDA
 
 ---
 
@@ -150,226 +131,165 @@ Per ora non sono usati, ma potranno essere integrati in futuro.
 **Cos'è UniProt**: il più grande archivio pubblico di informazioni sulle proteine.
 Ogni proteina ha un codice univoco chiamato *accession* (es. `P04637`).
 
-**File**: `uniprotkb_...2026_10_26.tsv` — 20 431 righe (solo proteine umane *reviewed*).
+**File**: `uniprotkb_...2026_10_26.tsv` — 20 431 righe (solo proteine umane *reviewed* / Swiss-Prot).
 
-UniProt **non contiene nuove informazioni biologiche per il nostro database**:
-il suo ruolo è fare da **ponte** tra IntOGen e DrugCentral.
-
-- IntOGen usa i **nomi dei geni** (es. `TP53`)
-- DrugCentral usa i **codici accession** delle proteine (es. `P04637`)
-- UniProt ha **entrambi**: sa che il gene `TP53` codifica la proteina `P04637`
-
-Senza UniProt non potremmo collegare i due dataset.
-
-**Dettaglio importante**: un singolo gene può avere **più nomi** (sinonimi).
-Per esempio il gene `ERBB2` è conosciuto anche come `HER2` e `NEU`.
-UniProt li elenca tutti, e il primo è quello ufficiale.
+UniProt fa da **ponte** tra IntOGen e DrugCentral:
+- IntOGen cataloga i dati tramite **nomi dei geni** (es. `TP53`)
+- DrugCentral indicizza i bersagli tramite **codici accession** UniProt (es. `P04637`)
+- UniProt associa entrambi, gestendo anche la molteplicità di sinonimi genici
 
 ---
 
 ## Cosa fa lo script di ispezione (01_inspect.py)
 
-Questo script **non modifica nessun dato**. Si limita a leggere i tre file
-e a stampare informazioni utili per capire com'è fatto ogni dataset.
+Questo script **non modifica nessun dato**. Si limita a leggere i file grezzi
+e a stampare a terminale diagnostiche complete:
 
-In pratica risponde a queste domande:
-
-1. **Quante righe e colonne ha ogni file?**
-2. **Quali colonne hanno molti valori mancanti?** (ci aiuta a capire cosa è obbligatorio
-   e cosa è opzionale nello schema del database)
-3. **Quali valori possono assumere le colonne categoriche?** (es. quali organismi,
-   quali tipi di azione farmacologica, quali ruoli dei geni)
-4. **Ci sono problemi nei dati?** (celle con più valori, formati inattesi)
-5. **I tre dataset sono compatibili?** (quanti geni/proteine hanno in comune)
-
-### Cosa si è scoperto
-
-- DrugCentral contiene interazioni per **molti organismi** (ratto, topo, batteri, virus...),
-  ma a noi servono solo quelle umane
-- Alcune celle di DrugCentral contengono **più valori** separati da `|` o `,`
-  (es. `P35367|P35368` nel campo ACCESSION) — vanno separati
-- La colonna `ACT_UNIT` è **completamente vuota** (100% null) — inutile
-- Il campo `ACTION_TYPE` è nullo nel 79% dei casi — non è sempre disponibile
-- Il confronto diretto dei nomi dei geni tra IntOGen e DrugCentral trova solo **144 geni in comune**,
-  ma il numero reale è più alto perché il confronto per nome è impreciso
-  (sinonimi, maiuscole/minuscole, celle multi-valore)
-- UniProt copre il **99.9%** delle accession di DrugCentral (solo 2 mancanti su 1 893)
+1. **Dimensioni e scheletro dei dati** (righe, colonne, tipi di dato).
+2. **Percentuale di valori nulli** per colonna per identificare vincoli `NOT NULL` vs `NULL`.
+3. **Distribuzione delle categorie** (`ORGANISM`, `ACTION_TYPE`, `TARGET_CLASS`, `ROLE`).
+4. **Anomalie strutturali** (celle multi-valore con delimitatori, righe duplicate).
+5. **Compatibilità di overlap**: quanti geni/proteine risultano in comune tra le sorgenti.
 
 ---
 
 ## Cosa fa lo script di pulizia (02_clean.py)
 
-Questo script legge i tre file grezzi e produce **7 file CSV puliti**,
-uno per ogni tabella del futuro database.
+Questo script legge i dati grezzi e genera gli **8 file CSV puliti** in `data/clean/`,
+garantendo la conformità allo schema relazionale in forma normale.
 
-### Passo 1 — UniProt
+### Passo 1 — UniProt (Anagrafica proteine e simboli)
+- Estrae le proteine umane revisionate generando `protein.csv` (20 433 righe).
+- Esplode i sinonimi genici generando `gene_symbol.csv` (45 565 righe), distinguendo il simbolo primario ufficiale (`is_primary = 1`) dai sinonimi secondari (`is_primary = 0`).
 
-**Cosa fa**: prende il file UniProt e crea due tabelle.
+### Passo 2 — DrugCentral (Interazioni, farmaci e bersagli)
+- **Filtro organismo**: seleziona unicamente le interazioni con bersagli umani (`ORGANISM = 'Homo sapiens'`), passando da 22 364 a 16 926 righe.
+- **Normalizzazione celle multi-valore**: le celle contenenti più accession o geni separati da delimitatori (`|`, `,`, `;`) vengono esplose in righe singole (da 16 926 a 18 749 righe), rispettando la 1a Forma Normale.
+- **Pulizia stringhe e rimozione valori ripetuti**: per campi come `TDL`, `SWISSPROT` e `TARGET_CLASS` (che presentavano stringhe ripetute come `Tclin|Tclin|Tclin` o multiple come `Tclin|Tchem`), la funzione dedicata `first_val()` estrae il singolo valore pulito.
+- **Creazione tabella `drug`**: isola 2 632 farmaci unici (`struct_id`, `drug_name`).
+- **Gestione accession orfane (stub)**: crea record "stub" nella tabella `protein` per le 2 accession umane presenti in DrugCentral ma assenti in UniProt, salvaguardando l'integrità referenziale.
+- **Creazione tabella `drug_target`**: genera 18 228 relazioni uniche farmaco-bersaglio. In caso di conflitti su `ACTION_TYPE`, adotta la classificazione più frequente (moda statistica).
+- **Creazione tabella `activity`**: isola 16 716 misurazioni numeriche di attività/potenza (`act_value`, `act_type`, `relation`, `act_source`).
 
-**Tabella `protein`** (20 433 righe): un elenco di proteine umane, una per riga.
-Ogni proteina ha il suo codice accession (che sarà la chiave principale del database),
-il suo nome e il nome mnemonico SwissProt.
+### Passo 3 — IntOGen (Geni driver e coorti)
+- **Standardizzazione**: nomi colonne in snake_case, conversione `is_driver` in booleano (0/1), conversione conteggi a interi (`Int64`).
+- **Creazione tabella `cohort`**: 260 coorti tumorali uniche con tipo tumorale associato e campioni totali.
+- **Risoluzione ponte genico IntOGen ──► UniProt**:
+  - Mappatura di ciascun `symbol` tramite la tabella `gene_symbol`.
+  - Risolti con successo **tutti i 633 geni driver** (0 geni senza accession).
+  - Per i 18 simboli ambigui (associati a più accession), priorità assegnata al simbolo primario HGNC.
+- **Creazione tabella `intogen_driver`**: 4 478 record gene driver–coorte arricchiti con l'accession UniProt.
 
-**Tabella `gene_symbol`** (45 565 righe): collega ogni proteina ai nomi dei geni
-che la codificano. Una proteina può avere più nomi di gene (sinonimi),
-quindi servono più righe. Il campo `is_primary` indica quale nome è quello ufficiale.
+### Passo 4 — Approvazioni regolatorie (FDA, EMA, PMDA)
+- Importazione dei file di approvazione `FDA_Approved.csv`, `EMA_Approved.csv` e `PMDA_Approved.csv`.
+- Mappatura e filtraggio su `struct_id` validi presenti nella tabella `drug`.
+- Generazione della tabella `drug_approval.csv` (2 401 associazioni farmaco-agenzia).
+  - FDA: 1 705 approvazioni
+  - EMA: 356 approvazioni
+  - PMDA: 340 approvazioni
 
-*Perché due tabelle separate?* Perché una proteina può avere 2, 5, anche 57 nomi
-di gene diversi. Metterli tutti in un'unica colonna renderebbe impossibile
-cercare per nome in modo efficiente.
-
-### Passo 2 — DrugCentral
-
-**Cosa fa**: il passo più complesso. Diverse operazioni in sequenza.
-
-**a) Filtro a Homo sapiens**
-- Si tengono solo le righe dove `ORGANISM = "Homo sapiens"`
-- Da 22 364 a **16 926 righe**
-- *Perché*: i geni driver di IntOGen sono umani, quindi ci servono
-  solo le interazioni con proteine umane
-
-**b) Separazione delle celle multi-valore**
-- Alcune righe hanno più codici accession o più geni nella stessa cella,
-  separati da `|`, `,` o `;`
-- Queste righe vengono "esplose": una riga con due accession diventa due righe
-- Da 16 926 a **18 749 righe**
-- *Perché*: nel database ogni interazione deve avere esattamente un farmaco
-  e un bersaglio. Se un farmaco agisce su due proteine diverse,
-  sono due interazioni distinte
-
-<!-- [APPROFONDIMENTO] Perché esistono celle multi-valore: complessi proteici
-     (es. un recettore formato da due subunità diverse) e isoforme
-     (es. più varianti della stessa proteina prodotte dallo stesso gene
-     per splicing alternativo). -->
-
-**c) Conversione dei tipi di dato**
-- `STRUCT_ID` (identificativo del farmaco): da testo a numero intero
-- `ACT_VALUE` (potenza del farmaco): da testo a numero decimale
-- `MOA` (meccanismo d'azione): da numero con virgola a un semplice sì/no (1 o 0)
-
-**d) Creazione della tabella `drug`** (2 632 righe)
-- Un elenco di farmaci unici, ciascuno con il suo codice e il suo nome
-- Si è verificato che ogni codice ha sempre lo stesso nome (0 conflitti)
-
-**e) Gestione delle proteine mancanti in UniProt**
-- 2 accession di DrugCentral non esistono in UniProt
-  (probabilmente codici vecchi o proteine non ancora revisionate)
-- Per non perdere queste interazioni, si creano dei record "provvisori" (stub)
-  nella tabella protein, usando le informazioni disponibili in DrugCentral
-- *Perché*: se le scartassimo, perderemmo tutti i farmaci collegati a queste proteine
-
-**f) Creazione della tabella `drug_target`** (18 228 righe)
-- Contiene le coppie uniche farmaco–proteina bersaglio
-- Quando la stessa coppia appare più volte (da fonti diverse) con classificazioni
-  diverse dell'`ACTION_TYPE`, si tiene quella più frequente (6 casi di conflitto)
-- *Perché*: nel database la relazione farmaco–bersaglio deve apparire una sola volta.
-  Le misurazioni multiple vanno in una tabella separata (activity)
-
-**g) Creazione della tabella `activity`** (16 716 righe)
-- Contiene le misurazioni quantitative di potenza dei farmaci
-  (solo le righe che hanno effettivamente un valore numerico)
-- Ogni riga dice: *"Il farmaco X è stato testato contro la proteina Y
-  con il metodo Z e ha dato un risultato W"*
-
-### Passo 3 — IntOGen
-
-**Cosa fa**: pulisce i dati di IntOGen e crea il collegamento con le proteine.
-
-**a) Pulizia dei nomi e dei tipi**
-- I nomi delle colonne vengono rinominati in minuscolo (convenzione SQL)
-- `IS_DRIVER`: da testo `"True"` a numero `1`
-- `MUTATIONS` e `SAMPLES`: da numeri con decimali (es. `10.0`) a numeri interi (es. `10`),
-  perché sono conteggi e non ha senso che siano decimali
-
-**b) Creazione della tabella `cohort`** (260 righe)
-- Ogni coorte è un dataset di pazienti analizzato.
-  Ha un nome, un tipo di tumore e un numero totale di campioni
-- Si è verificato che ogni coorte ha sempre lo stesso tipo di tumore
-  e lo stesso numero di campioni (0 incoerenze)
-
-**c) Collegamento dei geni alle proteine (il passo chiave)**
-- IntOGen usa i nomi dei geni (es. `TP53`)
-- Il database ha bisogno dei codici accession (es. `P04637`)
-- Si usa la tabella `gene_symbol` (costruita da UniProt) per tradurre:
-  *per ogni gene di IntOGen → cerca tra i simboli → trova l'accession*
-- Risultato: **tutti i 633 geni** hanno trovato un match (0 senza accession)
-- 18 geni erano ambigui (lo stesso nome poteva corrispondere a più proteine):
-  in questi casi si è scelta la proteina dove quel nome è il nome **ufficiale**
-
-<!-- [APPROFONDIMENTO] Perché i nomi dei geni possono essere ambigui:
-     storia della nomenclatura genetica, gene renaming da parte di HGNC,
-     e l'importanza di usare identificatori stabili come le accession UniProt. -->
-
-**d) Creazione della tabella `intogen_driver`** (4 478 righe)
-- Contiene tutte le associazioni gene driver–coorte, arricchite con l'accession UniProt
-- 0 duplicati trovati (ogni coppia gene–coorte è unica)
-
-### Passo 4 — Controlli finali e scrittura
-
-- Si verifica che nessun campo di testo superi la lunghezza massima prevista
-  dallo schema del database → **3 campi sforano** (`entry_name`, `protein_name`, `tdl`)
-  e andranno corretti nello schema SQL
-- Si scrivono i 7 file CSV nella cartella `data/clean/`
-
-### Il numero più importante
-
-> **149 geni driver su 633 (il 23.5%) hanno almeno un farmaco conosciuto
-> che colpisce la loro proteina.**
-
-Questo significa che per quasi un quarto dei geni che guidano i tumori
-esiste già un farmaco che potenzialmente potrebbe essere usato.
-I restanti ~484 geni sono territori ancora inesplorati dal punto di vista farmacologico.
+### Passo 5 — Validazione lunghezze e salvataggio
+- Verifica automatica che nessuna colonna ecceda i limiti VARCHAR previsti dallo schema SQL.
+- Salvataggio degli 8 file CSV pronti per il caricamento nel database.
 
 ---
 
-## Riepilogo delle 7 tabelle prodotte
+## Numeri chiave del database
 
-| Tabella | Righe | Cosa contiene |
-|---------|-------|---------------|
-| `protein` | 20 433 | Anagrafica delle proteine: codice, nome, classe, livello di studio |
-| `gene_symbol` | 45 565 | Collegamento proteina → nomi del gene (con sinonimi) |
-| `drug` | 2 632 | Elenco dei farmaci: codice e nome |
-| `drug_target` | 18 228 | Quali farmaci agiscono su quali proteine (e come) |
-| `activity` | 16 716 | Misurazioni di potenza dei farmaci sui bersagli |
-| `cohort` | 260 | Dataset di pazienti oncologici analizzati da IntOGen |
-| `intogen_driver` | 4 478 | Geni driver trovati in ogni coorte, con statistiche sulle mutazioni |
+- **633** geni driver oncologici totali analizzati in 260 coorti e 86 tipi tumorali.
+- **149 geni driver su 633 (23.5%)** hanno almeno un farmaco registrato in DrugCentral.
+- **515** farmaci totali colpiscono proteine di geni driver del cancro.
+- **361 farmaci su 515 (70.1%)** sono farmaci **già approvati** da almeno un'agenzia regolatoria (FDA, EMA o PMDA).
 
 ---
 
-## A quali domande potrà rispondere il database
+## Riepilogo delle 8 tabelle create
 
-1. **Per un tipo di tumore, quali geni driver hanno già un farmaco?**
-2. **Per un gene driver specifico, quali farmaci lo colpiscono e quanto sono potenti?**
-3. **Quanti geni driver sono ancora senza farmaci conosciuti?**
-   (opportunità per la ricerca)
-4. **Quali geni driver sono poco studiati (Tdark)?**
-   (bersagli "oscuri" su cui si sa ancora poco)
-5. **Per un farmaco, agisce su qualche gene driver tumorale?**
-   (possibilità di riposizionamento del farmaco in oncologia)
+| Tabella | Righe | Descrizione e Contenuto |
+|---------|-------|--------------------------|
+| `protein` | 20 433 | Anagrafica proteica UniProt (accession, entry_name, protein_name, target_class, tdl) |
+| `gene_symbol` | 45 565 | Mapping proteina → simboli genici con flag per nome primario (`is_primary`) |
+| `drug` | 2 632 | Anagrafica farmaci DrugCentral (`struct_id`, `drug_name`) |
+| `drug_approval` | 2 401 | Approvazioni regolatorie per farmaco e agenzia (`struct_id`, `agency`) |
+| `drug_target` | 18 228 | Relazione N:M farmaco–bersaglio con meccanismo d'azione (`moa`, `action_type`) |
+| `activity` | 16 716 | Misure quantitative di affinità/potenza farmacologica (IC50, Ki, Kd, ecc.) |
+| `cohort` | 260 | Coorti di pazienti oncologici con tipo di cancro e campioni |
+| `intogen_driver` | 4 478 | Geni driver per coorte con statistiche mutazionali e accession proteica collegata |
 
 ---
 
-## Prossimi passi
+## Problemi riscontrati e soluzioni adottate
 
-I dati sono puliti e pronti. Ecco cosa resta da fare, nell'ordine:
+Durante l'ispezione, la pulizia dei dati e la progettazione dello schema relazionale sono state affrontate diverse criticità tecniche e biologiche:
 
-### Passo 3 — Schema SQL (`schema.sql`)
-Scrivere le istruzioni `CREATE TABLE` per creare le 7 tabelle nel database MySQL,
-definendo per ogni campo il tipo di dato, la chiave primaria, le chiavi esterne
-(i collegamenti tra le tabelle) e gli indici per velocizzare le ricerche.
+### 1. Dati multi-valore e complessi proteici (DrugCentral)
+- **Problema**: Le colonne `ACCESSION` e `GENE` di DrugCentral contenevano celle con valori multipli separati da pipe `|`, virgole o spazi (es. complessi eterodimerici o canali composti da più subunità). Inserire valori composti avrebbe violato la 1a Forma Normale.
+- **Soluzione**: Implementazione della funzione `split_multi()` ed esplosione delle righe (`explode`), trasformando ogni coppia farmaco-subunità in una riga autonoma (da 16 926 a 18 749 righe).
 
-### Passo 4 — Caricamento (`03_load.py`)
-Scrivere uno script Python che legge i 7 CSV puliti e li carica nelle tabelle MySQL.
-Al termine si fanno controlli automatici: i conteggi tornano? Le chiavi esterne
-sono tutte valide?
+### 2. Valori duplicati e concatenati nei metadati dei target (`TDL`, `SWISSPROT`, `TARGET_CLASS`)
+- **Problema**: In DrugCentral, colonne descrittive come `TDL` (Target Development Level) contenevano spesso stringhe ripetute decine di volte separate da pipe (es. `Tclin|Tclin|Tclin|...` per decine di ripetizioni) o valori eterogenei come `Tclin|Tchem`. Questo sporcava il dato e faceva fallire i vincoli di dimensione (`VARCHAR(10)`).
+- **Soluzione**: Creazione della funzione `first_val()`, che estrae unicamente il primo token valido ed elimina la ridondanza prima dell'inserimento.
 
-### Passo 5 — Query analitiche
-Scrivere delle query SQL che rispondono alle domande del progetto
-(vedi sezione precedente). Queste query sono il vero "prodotto" del database:
-dimostrano che l'integrazione dei dati funziona e produce risultati utili.
+### 3. Disallineamento tra identificatori IntOGen e DrugCentral
+- **Problema**: IntOGen utilizza unicamente i simboli genici (`SYMBOL`, es. *TP53*), mentre DrugCentral identifica i bersagli proteici tramite codici UniProt (`ACCESSION`, es. *P04637*). Un confronto diretto per nome del gene intercettava appena 144 corrispondenze a causa di sinonimi e nomenclature disomogenee.
+- **Soluzione**: Utilizzo dell'archivio UniProt come "dizionario ponte", creando la tabella `gene_symbol` (45 565 record) che ha permesso di collegare correttamente tutti i 633 geni driver IntOGen alle rispettive proteine.
 
-### Passo 6 (opzionale) — Arricchimenti
-- Aggiungere una tabella `drug_approval` con i farmaci approvati da FDA, EMA, PMDA
-  (i file sono già nella cartella raw, servono solo poche righe di codice)
-- Normalizzare i codici dei tipi tumorali in una tabella `cancer_type`
-  (es. BRCA = "Breast invasive carcinoma")
+### 4. Ambiguità nei simboli dei geni (Sinonimi condivisi)
+- **Problema**: A causa di ridenominazioni storiche della nomenclatura genetica (HGNC), 18 simboli genici in IntOGen corrispondevano a più di un'accession proteica in UniProt.
+- **Soluzione**: Risoluzione deterministica dell'ambiguità assegnando priorità ai record con `is_primary = 1` (simbolo ufficiale HGNC), garantendo la copertura del 100% dei geni driver senza duplicazioni orfane.
+
+### 5. Accession DrugCentral non censite in UniProt
+- **Problema**: 2 codici accession di proteine umane presenti in DrugCentral non risultavano nel compendio Swiss-Prot delle proteine umane revisionate. Scartarli avrebbe comportato la perdita delle interazioni e dei farmaci collegati.
+- **Soluzione**: Generazione di record provvisori (*stub*) nella tabella `protein`, popolandoli con i dati accessori forniti da DrugCentral per preservare l'integrità referenziale.
+
+### 6. Conflitti di annotazione in `ACTION_TYPE`
+- **Problema**: Alcune coppie farmaco-bersaglio presentavano classificazioni discordanti dell'azione farmacologica (`ACTION_TYPE`) dovute alla confluenza di molteplici banche dati e pubblicazioni in DrugCentral (6 coppie in conflitto).
+- **Soluzione**: Selezione del valore più frequente per la coppia tramite la moda statistica (`mode_or_na`) per la tabella relazionale `drug_target`, conservando invece tutte le misure dettagliate nella tabella `activity`.
+
+### 7. Formato eterogeneo dei file di approvazione farmaci
+- **Problema**: I file `FDA_Approved.csv`, `EMA_Approved.csv` e `PMDA_Approved.csv` erano file grezzi privi di riga di intestazione e includevano farmaci veterinari o non presenti nell'anagrafica dei farmaci umani analizzati.
+- **Soluzione**: Assegnazione programmata delle intestazioni, filtraggio selettivo sui soli `struct_id` validati nella tabella `drug`, deduplicazione e aggiunta della colonna identificativa dell'agenzia (`agency`).
+
+### 8. Dimensionamento dei tipi di dato nello schema SQL
+- **Problema**: Dai test di lunghezza eseguiti sui CSV puliti rispetto allo schema SQL iniziale sono emerse stringhe più lunghe del previsto:
+  - `protein_name` superava `VARCHAR(500)` a causa di descrizioni proteiche ed enzimatiche estese.
+  - `cohort` superava `VARCHAR(60)` per coorti con nomi compositi.
+  - `cancer_type` superava `VARCHAR(20)`.
+  - `accession` rischiava di saturare `VARCHAR(10)` per formati estesi.
+- **Soluzione**: Riadattamento dello schema DDL MySQL (`schema.sql`):
+  - `protein_name` impostato a `TEXT`.
+  - `cohort` allargato a `VARCHAR(80)`.
+  - `cancer_type` allargato a `VARCHAR(30)`.
+  - `accession` allargato a `VARCHAR(15)`.
+
+### 9. Qualità e tipi di dato nativi dei file grezzi
+- **Problema**: In IntOGen i campi di conteggio (`MUTATIONS`, `SAMPLES`) erano esportati con decimali (`10.0`), e `IS_DRIVER` conteneva stringhe `"True"`. In DrugCentral la colonna `ACT_UNIT` era vuota al 100%.
+- **Soluzione**: Cast dei conteggi al tipo intero (`Int64`), trasformazione del flag in intero booleano `TINYINT(1)`, e rimozione della colonna `ACT_UNIT`.
+
+---
+
+## Stato del progetto e prossimi passi
+
+### Passo 1 — Esplorazione dei dati (`01_inspect.py`)
+- **[COMPLETATO]** Diagnosi e ispezione qualitativa dei file raw.
+
+### Passo 2 — Pulizia ed esportazione CSV (`02_clean.py`)
+- **[COMPLETATO]** Generazione degli 8 file CSV normalizzati in `data/clean/`, inclusa la tabella `drug_approval`.
+
+### Passo 3 — Schema SQL relazionale (`sql/schema.sql`)
+- **[COMPLETATO]** Creato lo script DDL per MySQL con:
+  - Creazione del database `intogen_drugcentral` (`utf8mb4`).
+  - 8 tabelle relazionali conformi alla forma normale.
+  - Chiavi primarie, vincoli di unicità e indici di ricerca (`KEY idx_*`).
+  - Vincoli di chiave esterna con gestione dell'integrità referenziale (`ON UPDATE CASCADE`, `ON DELETE CASCADE` / `SET NULL`).
+
+### Passo 4 — Caricamento nel database (`03_load.py`)
+- **[DA FARE]** Scrivere lo script di caricamento automatico che legge gli 8 file CSV da `data/clean/` e popola le tabelle MySQL, effettuando la verifica dei record caricati e il test dei vincoli di integrità.
+
+### Passo 5 — Query analitiche SQL
+- **[DA FARE]** Scrivere le query SQL per rispondere alle domande scientifiche del progetto:
+  1. Bersagliabilità dei driver per tipo tumorale (es. quali geni driver di BRCA hanno farmaci approvati da FDA/EMA).
+  2. Profilo di affinità/potenza dei farmaci attivi su specifici oncogeni o oncosoppressori.
+  3. Geni driver ad alta frequenza ancora privi di farmaci noti (opportunità di drug discovery).
+  4. Analisi dei geni driver con livello di sviluppo Tdark.
+  5. Opportunità di riposizionamento farmacologico (*drug repurposing*).
