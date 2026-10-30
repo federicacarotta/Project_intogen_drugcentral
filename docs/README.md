@@ -43,10 +43,12 @@ Project_intogen_drugcentral/
 │
 ├── scripts/
 │   ├── 01_inspect.py        ← esplora i dati grezzi (non modifica nulla)
-│   └── 02_clean.py          ← pulisce i dati e produce gli 8 CSV in data/clean/
+│   ├── 02_clean.py          ← pulisce i dati e produce gli 8 CSV in data/clean/
+│   └── 03_load.py           ← crea il DB ed effettua il caricamento massivo in MySQL
 │
 ├── sql/
-│   └── schema.sql           ← schema DDL MySQL (8 tabelle, vincoli e indici)
+│   ├── schema.sql           ← schema DDL MySQL (8 tabelle, vincoli e indici)
+│   └── queries.sql          ← vista integrata e 7 query analitiche per la presentazione
 │
 └── docs/
     └── README.md            ← documentazione del progetto
@@ -284,12 +286,43 @@ Durante l'ispezione, la pulizia dei dati e la progettazione dello schema relazio
   - Vincoli di chiave esterna con gestione dell'integrità referenziale (`ON UPDATE CASCADE`, `ON DELETE CASCADE` / `SET NULL`).
 
 ### Passo 4 — Caricamento nel database (`03_load.py`)
-- **[DA FARE]** Scrivere lo script di caricamento automatico che legge gli 8 file CSV da `data/clean/` e popola le tabelle MySQL, effettuando la verifica dei record caricati e il test dei vincoli di integrità.
+- **[COMPLETATO]** Creato lo script di caricamento automatico [`scripts/03_load.py`](../scripts/03_load.py) che:
+  - Si connette a MySQL (creando lo schema da `sql/schema.sql` se non presente).
+  - Inserisce i dati in batch (5.000 righe) rispettando rigorosamente l'albero delle Foreign Key.
+  - Verifica l'integrità referenziale e stampa la tabella dei conteggi effettivi.
 
-### Passo 5 — Query analitiche SQL
-- **[DA FARE]** Scrivere le query SQL per rispondere alle domande scientifiche del progetto:
-  1. Bersagliabilità dei driver per tipo tumorale (es. quali geni driver di BRCA hanno farmaci approvati da FDA/EMA).
-  2. Profilo di affinità/potenza dei farmaci attivi su specifici oncogeni o oncosoppressori.
-  3. Geni driver ad alta frequenza ancora privi di farmaci noti (opportunità di drug discovery).
-  4. Analisi dei geni driver con livello di sviluppo Tdark.
-  5. Opportunità di riposizionamento farmacologico (*drug repurposing*).
+### Passo 5 — Viste e Query analitiche SQL (`sql/queries.sql`)
+- **[COMPLETATO]** Creato il file [`sql/queries.sql`](../sql/queries.sql) contenente:
+  - **Vista integrata** `v_driver_drug_candidates`: collega driver oncologici, coorti, proteine UniProt, target, farmaci e approvazioni.
+  - **Query di controllo qualità (QC)**: misura percentuale di copertura e classi proteiche dei bersagli.
+  - **7 Query analitiche d'esame**:
+    1. Farmaci associati a geni driver di specifici tumori (es. BRCA, LUAD).
+    2. Geni driver più "druggable" (con aggregazioni `GROUP BY` e filtro `HAVING`).
+    3. Farmaci multi-target attivi su più geni driver dello stesso tumore.
+    4. Query "biologicamente prudente" (oncogeni `Act` combinati con farmaci inibitori).
+    5. Opportunità di Drug Discovery: oncoproteine ad alta frequenza senza alcun farmaco noto.
+    6. Misure quantitative di potenza sperimentale (CTE con filtri `act_value >= 8.0`, ovvero concentrazione sub-nanomolare).
+    7. Opportunità di riposizionamento farmacologico (*drug repurposing*) su tumori ad alta mortalità (PAAD, GBM, LAML).
+
+---
+
+## Come eseguire il caricamento e presentare su MySQL
+
+### 1. Caricamento rapido (via Script)
+Dal terminale, con l'ambiente virtuale attivo:
+```bash
+cd /Users/federica/Desktop/Project_intogen_drugcentral
+.venv/bin/python scripts/03_load.py --user root --init-schema
+```
+Lo script ti chiederà la password di `root`, creerà il database, le 8 tabelle e caricherà tutti i dati in pochi secondi.
+
+### 2. Presentazione d'esame (in MySQL Workbench)
+1. **Mostrare l'EER Diagram (Schema concettuale/logico)**:
+   - Apri MySQL Workbench e connettiti alla tua istanza locale (`root@localhost:3306`).
+   - Vai nel menu in alto: **Database ➔ Reverse Engineer...**
+   - Seleziona il database `intogen_drugcentral` e clicca *Next*.
+   - Verrà generato automaticamente il diagramma con tutte le 8 tabelle e le relative relazioni (1:N e N:M). Mostra al docente come UniProt fa da ponte tra IntOGen e DrugCentral.
+2. **Creare la vista ed eseguire le query**:
+   - Apri il file `sql/queries.sql` dentro una scheda di Workbench (`File ➔ Open SQL Script...`).
+   - Esegui la prima istruzione per creare la vista `v_driver_drug_candidates`.
+   - Esegui le singole query analitiche (usando il cursore e il pulsante fulmine ⚡️) commentando i risultati biologici ottenuti.
