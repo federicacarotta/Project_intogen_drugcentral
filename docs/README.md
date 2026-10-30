@@ -326,3 +326,7 @@ Lo script ti chiederà la password di `root`, creerà il database, le 8 tabelle 
    - Apri il file `sql/queries.sql` dentro una scheda di Workbench (`File ➔ Open SQL Script...`).
    - Esegui la prima istruzione per creare la vista `v_driver_drug_candidates`.
    - Esegui le singole query analitiche (usando il cursore e il pulsante fulmine ⚡️) commentando i risultati biologici ottenuti.
+
+
+
+prova prova prova 
