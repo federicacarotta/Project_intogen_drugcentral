@@ -50,7 +50,7 @@ TABLE_CONFIGS = [
     {
         "table": "drug_target",
         "file": "drug_target.csv",
-        "columns": ["struct_id", "accession", "moa", "action_type", "moa_source"],
+        "columns": ["struct_id", "accession", "target_class", "moa", "action_type", "moa_source"],
     },
     {
         "table": "activity",

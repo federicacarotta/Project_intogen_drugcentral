@@ -5,8 +5,8 @@
 -- Include:
 --   1. VISTA INTEGRATA (v_driver_drug_candidates)
 --   2. CONTROLLI DI QUALITÀ E VERIFICA MAPPING
---   3. 7 QUERY ANALITICHE PER LA PRESENTAZIONE (JOIN, GROUP BY,
---      HAVING, CTE/SUBQUERIES, FILTRI BIOLOGICI)
+--   3. 8 QUERY ANALITICHE PER LA PRESENTAZIONE (JOIN, GROUP BY,
+--      HAVING, CTE/SUBQUERIES, FILTRI BIOLOGICI, ANALISI COORTI)
 -- ============================================================
 
 USE intogen_drugcentral;
@@ -226,3 +226,27 @@ WHERE v.cancer_type IN ('PAAD', 'GBM', 'LAML') -- Pancreas, Glioblastoma, Leucem
   AND v.approved_by IS NOT NULL
   AND v.moa = 1
 ORDER BY v.cancer_type, v.drug_name;
+
+
+-- ------------------------------------------------------------
+-- QUERY 8: Analisi epidemiologica delle coorti (Giustificazione suddivisione COHORT / INTOGEN_DRIVER)
+-- Domanda biologica: Quante coorti e quanti pazienti totali sono stati sequenziati per ciascun tipo tumorale,
+--                    e quanti geni driver unici sono stati identificati?
+-- Perché giustifica la suddivisione:
+--   Se COHORT e INTOGEN_DRIVER fossero un'unica tabella non normalizzata, SUM(total_samples) moltiplicherebbe
+--   il numero di pazienti per ogni gene driver scoperto in quella coorte (sovrastima da 20x a 100x!).
+--   Separando le tabelle, la dimensione campionaria è un attributo puro della coorte (2NF/3NF),
+--   garantendo statistiche corrette, zero ridondanza e facilità di JOIN con i driver.
+-- Mostra: LEFT JOIN tra tabella di dimensione (cohort) e tabella dei fatti (intogen_driver), aggregazioni accurate.
+-- ------------------------------------------------------------
+SELECT 
+    c.cancer_type,
+    COUNT(DISTINCT c.cohort) AS n_cohorts,
+    SUM(c.total_samples) AS total_patients_sequenced,
+    COUNT(DISTINCT ig.symbol) AS total_unique_driver_genes,
+    ROUND(SUM(c.total_samples) / COUNT(DISTINCT c.cohort), 0) AS avg_patients_per_cohort
+FROM cohort c
+LEFT JOIN intogen_driver ig ON ig.cohort = c.cohort
+GROUP BY c.cancer_type
+ORDER BY total_patients_sequenced DESC
+LIMIT 20;

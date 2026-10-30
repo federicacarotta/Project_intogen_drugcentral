@@ -72,18 +72,21 @@ CREATE TABLE drug_approval (
 -- ============================================================
 -- 5. DRUG_TARGET
 -- Relazione N:M farmaco ↔ proteina bersaglio.
+-- target_class specifica la famiglia biologica del bersaglio.
 -- moa = 1 se è il meccanismo d'azione principale.
 -- ============================================================
 CREATE TABLE drug_target (
     id            INT           NOT NULL AUTO_INCREMENT,
     struct_id     INT           NOT NULL,
     accession     VARCHAR(15)   NOT NULL,
+    target_class  VARCHAR(50)   COMMENT 'Famiglia biologica del bersaglio (es. Kinase, GPCR)',
     moa           TINYINT(1)    NOT NULL DEFAULT 0,
     action_type   VARCHAR(50),
     moa_source    VARCHAR(50),
     PRIMARY KEY (id),
     UNIQUE KEY uq_drug_target (struct_id, accession),
     KEY idx_dt_accession (accession),
+    KEY idx_dt_class (target_class),
     CONSTRAINT fk_dt_drug
         FOREIGN KEY (struct_id) REFERENCES drug(struct_id)
         ON UPDATE CASCADE ON DELETE CASCADE,

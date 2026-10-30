@@ -160,6 +160,7 @@ print(f"  coppie con ACTION_TYPE in conflitto (uso il piu' frequente): {(conf > 
 drug_target = (
     drug.groupby(["struct_id", "acc"])
     .agg(
+        target_class=("TARGET_CLASS", first_val),
         moa=("moa", "max"),
         action_type=("ACTION_TYPE", mode_or_na),
         moa_source=("MOA_SOURCE", mode_or_na),
@@ -167,6 +168,9 @@ drug_target = (
     .reset_index()
     .rename(columns={"acc": "accession"})
 )
+drug_target = drug_target[
+    ["struct_id", "accession", "target_class", "moa", "action_type", "moa_source"]
+]
 
 # --- activity: solo le righe con un valore di attivita' misurato
 activity = drug[drug["act_value"].notna()][
@@ -252,7 +256,8 @@ intogen_driver = ig[
 LIMITS = [
     (protein, "accession", 15), (protein, "entry_name", 30),
     (protein, "target_class", 50), (protein, "tdl", 10), (gene_symbol, "symbol", 50),
-    (drug_t, "drug_name", 255), (drug_target, "action_type", 50),
+    (drug_t, "drug_name", 255), (drug_target, "target_class", 50),
+    (drug_target, "action_type", 50),
     (drug_target, "moa_source", 50), (activity, "act_type", 20), (activity, "relation", 5),
     (activity, "act_source", 50), (intogen_driver, "methods", 255),
     (intogen_driver, "transcript", 20), (cohort, "cohort", 80), (cohort, "cancer_type", 30),
