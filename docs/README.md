@@ -286,3 +286,6 @@ cd /Users/federica/Desktop/Project_intogen_drugcentral
 ### 3. Presentazione in MySQL Workbench
 1. **Diagramma EER**: Menu **Database ➔ Reverse Engineer...** ➔ selezionare il database `intogen_drugcentral`. Verranno visualizzate le 8 tabelle con le relazioni 1:N e N:M centrate sul ponte UniProt.
 2. **Esecuzione Query**: Aprire `sql/queries.sql` in Workbench ed eseguire le 8 query analitiche (dal calcolo di druggability al riposizionamento su tumori rari e alle statistiche epidemiologiche delle coorti).
+
+
+aggiornato
