@@ -53,14 +53,6 @@ TABLE_CONFIGS = [
         "columns": ["struct_id", "accession", "target_class", "moa", "action_type", "moa_source"],
     },
     {
-        "table": "activity",
-        "file": "activity.csv",
-        "columns": [
-            "struct_id", "accession", "act_type", "act_value", 
-            "relation", "act_source", "act_comment"
-        ],
-    },
-    {
         "table": "intogen_driver",
         "file": "intogen_driver.csv",
         "columns": [

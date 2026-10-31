@@ -172,19 +172,6 @@ drug_target = drug_target[
     ["struct_id", "accession", "target_class", "moa", "action_type", "moa_source"]
 ]
 
-# --- activity: solo le righe con un valore di attivita' misurato
-activity = drug[drug["act_value"].notna()][
-    ["struct_id", "acc", "ACT_TYPE", "act_value", "RELATION", "ACT_SOURCE", "ACT_COMMENT"]
-].rename(
-    columns={
-        "acc": "accession",
-        "ACT_TYPE": "act_type",
-        "RELATION": "relation",
-        "ACT_SOURCE": "act_source",
-        "ACT_COMMENT": "act_comment",
-    }
-)
-
 # --------------------------------------------------------------- 3. IntOGen
 print("\n[3/4] IntOGen")
 ig = pd.read_csv(INTOGEN, sep="\t", low_memory=False)
@@ -258,8 +245,7 @@ LIMITS = [
     (protein, "target_class", 50), (protein, "tdl", 10), (gene_symbol, "symbol", 50),
     (drug_t, "drug_name", 255), (drug_target, "target_class", 50),
     (drug_target, "action_type", 50),
-    (drug_target, "moa_source", 50), (activity, "act_type", 20), (activity, "relation", 5),
-    (activity, "act_source", 50), (intogen_driver, "methods", 255),
+    (drug_target, "moa_source", 50), (intogen_driver, "methods", 255),
     (intogen_driver, "transcript", 20), (cohort, "cohort", 80), (cohort, "cancer_type", 30),
 ]
 print("\nControllo lunghezze rispetto a schema.sql:")
@@ -301,7 +287,6 @@ save(gene_symbol, "gene_symbol")
 save(drug_t, "drug")
 save(drug_approval, "drug_approval")
 save(drug_target, "drug_target")
-save(activity, "activity")
 save(cohort, "cohort")
 save(intogen_driver, "intogen_driver")
 

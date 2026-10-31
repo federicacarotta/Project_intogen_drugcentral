@@ -4,8 +4,15 @@
 --
 -- INDICE DEI CONTENUTI:
 --   PARTE 1: VISTA INTEGRATA (v_driver_drug_candidates) & QC
---   PARTE 2: 5 QUERY LINEARI BASE (MAX 1-3 JOIN, SEMPLICI E DIRETTE)
---   PARTE 3: QUERY ANALITICHE STRUTTURATE (I 3 LIVELLI D'ESAME)
+--   PARTE 2: LE 8 QUERY D'ESAME OMOGENEIZZATE E ORDINATE
+--      1. Il Ponte Relazionale Fondamentale (Caso Studio EGFR) [3 JOIN]
+--      2. Geni Driver più Mutati nel Tumore al Seno (BRCA) [1 JOIN]
+--      3. Farmaci Inibitori con Meccanismo d'Azione Primario [1 JOIN]
+--      4. Farmaci Approvati da FDA Attivi sulle Chinasi [2 JOIN]
+--      5. Geni Driver e Anagrafica Proteica nel Glioblastoma (GBM) [2 JOIN]
+--      6. Terapie a Bersaglio Molecolare nel Tumore al Polmone (LUAD)
+--      7. Polifarmacologia — Farmaci Multi-Target nello Stesso Tumore
+--      8. Drug Repurposing su Tumori a Prognosi Infausta (PAAD e GBM)
 -- ============================================================
 
 USE intogen_drugcentral;
@@ -55,23 +62,55 @@ SELECT
 FROM intogen_driver ig
 LEFT JOIN drug_target dt ON dt.accession = ig.accession;
 
+-- QC 2. Distribuzione delle classi proteiche dei bersagli
+SELECT 
+    COALESCE(p.target_class, 'Non classificata') AS target_class,
+    COUNT(DISTINCT p.accession) AS total_proteins,
+    COUNT(DISTINCT dt.struct_id) AS total_drugs
+FROM protein p
+LEFT JOIN drug_target dt ON dt.accession = p.accession
+GROUP BY p.target_class
+ORDER BY total_proteins DESC;
+
 
 -- ============================================================
--- PARTE 2: 5 QUERY LINEARI BASE (MAX 1-3 JOIN, NESSUNA COMPLESSITÀ)
--- Ideali da presentare all'inizio dell'orale per spiegare le tabelle
+-- PARTE 2: LE 8 QUERY D'ESAME
 -- ============================================================
 
 -- ------------------------------------------------------------
--- BASE 1 (1 JOIN): I geni driver più mutati nel tumore al seno (BRCA)
--- Tabelle: intogen_driver, cohort
--- Concetto SQL: INNER JOIN tra tabella fatti e coorti, filtro su stringa, ordinamento numerico.
--- Spiegazione: Mostra quali geni presentano il maggior numero di pazienti mutati
---              negli studi clinici sul carcinoma mammario (es. PIK3CA, TP53).
+-- QUERY 1 (ex BASE 5): Il Ponte Relazionale Fondamentale (Caso Studio EGFR)
+-- Tabelle: intogen_driver, protein, drug_target, drug (3 JOIN)
+-- Concetto SQL: Tre INNER JOIN lineari: Gene -> Proteina -> Bersaglio -> Farmaco.
+-- Spiegazione: È il cuore del progetto. Dato l'oncogene EGFR identificato in IntOGen,
+--              attraversa UniProt e trova tutti i farmaci approvati/sperimentali
+--              di DrugCentral con il relativo tipo di azione farmacologica.
+-- ------------------------------------------------------------
+SELECT DISTINCT
+    ig.symbol AS driver_gene,
+    p.entry_name,
+    d.drug_name,
+    dt.action_type
+FROM intogen_driver ig
+JOIN protein p ON p.accession = ig.accession
+JOIN drug_target dt ON dt.accession = p.accession
+JOIN drug d ON d.struct_id = dt.struct_id
+WHERE ig.symbol = 'EGFR'
+  AND dt.action_type IS NOT NULL
+ORDER BY d.drug_name
+LIMIT 10;
+
+
+-- ------------------------------------------------------------
+-- QUERY 2 (ex BASE 1): Geni Driver più Mutati nel Tumore al Seno (BRCA)
+-- Tabelle: intogen_driver, cohort (1 JOIN)
+-- Concetto SQL: INNER JOIN tra tabella fatti e tabella dimensionale coorte, ordinamento numerico.
+-- Spiegazione: Mostra i geni driver con il maggior numero di pazienti mutati
+--              negli studi clinici sul carcinoma mammario (es. PIK3CA, TP53, ESR1).
 -- ------------------------------------------------------------
 SELECT 
-    ig.symbol AS gene,
-    ig.role AS biological_role,
-    ig.samples AS mutated_patients,
+    ig.symbol AS driver_gene,
+    ig.role AS driver_role,
+    ig.samples AS mutated_samples,
     c.cohort
 FROM intogen_driver ig
 JOIN cohort c ON c.cohort = ig.cohort
@@ -81,11 +120,11 @@ LIMIT 10;
 
 
 -- ------------------------------------------------------------
--- BASE 2 (1 JOIN): Farmaci inibitori con meccanismo d'azione primario
--- Tabelle: drug, drug_target
--- Concetto SQL: INNER JOIN tra farmaco e bersaglio, doppio filtro WHERE su flag e tipo azione.
--- Spiegazione: Isola le molecole che hanno come target primario validato (moa = 1)
---              un'azione inibitoria ('INHIBITOR'), scartando legami aspecifici.
+-- QUERY 3 (ex BASE 2): Farmaci Inibitori con Meccanismo d'Azione Primario
+-- Tabelle: drug, drug_target (1 JOIN)
+-- Concetto SQL: INNER JOIN con doppio filtro WHERE su flag di primarietà e tipo azione.
+-- Spiegazione: Isola le molecole che agiscono come inibitori accertati ('INHIBITOR')
+--              sul loro bersaglio terapeutico primario (moa = 1), escludendo lo screening aspecifico.
 -- ------------------------------------------------------------
 SELECT DISTINCT
     d.drug_name,
@@ -100,15 +139,15 @@ LIMIT 10;
 
 
 -- ------------------------------------------------------------
--- BASE 3 (2 JOIN): Farmaci approvati FDA attivi sulla famiglia delle chinasi
--- Tabelle: drug, drug_approval, drug_target
--- Concetto SQL: Due INNER JOIN a stella con centro sull'anagrafica del farmaco (drug).
--- Spiegazione: Mostra i farmaci certificati dall'ente regolatore americano (FDA)
---              che colpiscono specificamente la classe proteica delle Chinasi.
+-- QUERY 4 (ex BASE 3): Farmaci Approvati da FDA Attivi sulle Chinasi
+-- Tabelle: drug, drug_approval, drug_target (2 JOIN)
+-- Concetto SQL: Due INNER JOIN centrate sull'anagrafica del farmaco (drug).
+-- Spiegazione: Seleziona i farmaci autorizzati dall'agenzia americana FDA
+--              che colpiscono specificamente la classe delle Chinasi (cruciale in oncologia).
 -- ------------------------------------------------------------
 SELECT DISTINCT
     d.drug_name,
-    da.agency,
+    da.agency AS approved_by,
     dt.target_class
 FROM drug d
 JOIN drug_approval da ON da.struct_id = d.struct_id
@@ -120,17 +159,17 @@ LIMIT 10;
 
 
 -- ------------------------------------------------------------
--- BASE 4 (2 JOIN): Geni driver e anagrafica proteica nel glioblastoma (GBM)
--- Tabelle: intogen_driver, protein, cohort
--- Concetto SQL: Due INNER JOIN che collegano il tumore alla proteina anagrafica via accession.
--- Spiegazione: Per un tumore cerebrale ad alta mortalità (GBM), elenca i geni driver
---              con il nome completo della proteina UniProt e la classe funzionale.
+-- QUERY 5 (ex BASE 4): Geni Driver e Anagrafica Proteica nel Glioblastoma (GBM)
+-- Tabelle: intogen_driver, protein, cohort (2 JOIN)
+-- Concetto SQL: Due INNER JOIN che collegano la coorte clinica all'anagrafica UniProt.
+-- Spiegazione: Per il glioblastoma cerebrale (GBM), traduce i simboli genici nelle corrispondenti
+--              proteine umane UniProt evidenziando la famiglia funzionale e il ruolo biologico.
 -- ------------------------------------------------------------
 SELECT DISTINCT
     ig.symbol AS driver_gene,
     p.entry_name,
     p.target_class,
-    ig.role
+    ig.role AS driver_role
 FROM intogen_driver ig
 JOIN protein p ON p.accession = ig.accession
 JOIN cohort c ON c.cohort = ig.cohort
@@ -140,37 +179,12 @@ LIMIT 10;
 
 
 -- ------------------------------------------------------------
--- BASE 5 (3 JOIN): Il ponte relazionale completo per un oncogene chiave (EGFR)
--- Tabelle: intogen_driver, protein, drug_target, drug
--- Concetto SQL: Tre INNER JOIN lineari: Gene -> Proteina -> Target -> Farmaco.
--- Spiegazione: Rappresenta il percorso fondante del progetto: dato il gene EGFR
---              identificato in IntOGen, naviga attraverso UniProt ed elenca
---              tutti i farmaci censiti in DrugCentral con la loro azione.
+-- QUERY 6 (ex LIVELLO 1 Q1): Terapie a Bersaglio Molecolare nel Tumore al Polmone (LUAD)
+-- Tabelle: intogen_driver, cohort, protein, drug_target, drug, drug_approval (5 JOIN)
+-- Concetto SQL: Catena completa di 5 JOIN con aggregazione stringa GROUP_CONCAT per le agenzie.
+-- Spiegazione: Nel carcinoma polmonare (LUAD), estrae i farmaci approvati con meccanismo d'azione
+--              primario validato (moa = 1) attivi contro i suoi oncogeni (BRAF, EGFR).
 -- ------------------------------------------------------------
-SELECT DISTINCT
-    ig.symbol AS gene,
-    p.entry_name,
-    d.drug_name,
-    dt.action_type
-FROM intogen_driver ig
-JOIN protein p ON p.accession = ig.accession
-JOIN drug_target dt ON dt.accession = p.accession
-JOIN drug d ON d.struct_id = dt.struct_id
-WHERE ig.symbol = 'EGFR'
-  AND dt.action_type IS NOT NULL
-ORDER BY d.drug_name
-LIMIT 10;
-
-
--- ============================================================
--- PARTE 3: LE 9 QUERY ANALITICHE STRUTTURATE (I 3 LIVELLI D'ESAME)
--- ============================================================
-
--- ============================================================
--- LIVELLO 1: AGGREGAZIONI DI BASE E VALIDAZIONE
--- ============================================================
-
--- QUERY 1: Terapie a Bersaglio Molecolare nel Tumore al Polmone (LUAD)
 SELECT 
     ig.symbol AS driver_gene,
     d.drug_name,
@@ -186,69 +200,16 @@ WHERE c.cancer_type = 'LUAD'
   AND dt.moa = 1
 GROUP BY ig.symbol, d.drug_name, dt.action_type
 ORDER BY ig.symbol, d.drug_name
-LIMIT 15;
-
-
--- QUERY 2: Match Meccanicistico Oncogene ↔ Farmaco Inibitore
-SELECT DISTINCT 
-    c.cancer_type,
-    ig.symbol AS oncogene,
-    p.target_class,
-    d.drug_name,
-    dt.action_type
-FROM intogen_driver ig
-JOIN cohort c ON c.cohort = ig.cohort
-JOIN protein p ON p.accession = ig.accession
-JOIN drug_target dt ON dt.accession = p.accession
-JOIN drug d ON d.struct_id = dt.struct_id
-WHERE ig.role = 'Act'
-  AND (
-      dt.action_type LIKE '%INHIBITOR%' 
-      OR dt.action_type LIKE '%ANTAGONIST%' 
-      OR dt.action_type LIKE '%BLOCKER%'
-  )
-ORDER BY c.cancer_type, ig.symbol, d.drug_name
-LIMIT 15;
-
-
--- QUERY 3: Validazione Epidemiologica delle Coorti (Dimostrazione 3NF)
-SELECT 
-    c.cancer_type,
-    COUNT(DISTINCT c.cohort) AS n_cohorts,
-    SUM(c.total_samples) AS total_patients_sequenced,
-    COUNT(DISTINCT ig.symbol) AS unique_driver_genes,
-    ROUND(SUM(c.total_samples) / COUNT(DISTINCT c.cohort), 0) AS avg_patients_per_cohort
-FROM cohort c
-LEFT JOIN intogen_driver ig ON ig.cohort = c.cohort
-GROUP BY c.cancer_type
-ORDER BY total_patients_sequenced DESC
 LIMIT 10;
 
 
--- ============================================================
--- LIVELLO 2: AGGREGAZIONI CON HAVING E ANALISI DI RETE
--- ============================================================
-
--- QUERY 4: Druggability Ranking dei Geni Driver Oncologici
-SELECT 
-    ig.symbol AS driver_gene,
-    p.target_class,
-    p.tdl,
-    COUNT(DISTINCT dt.struct_id) AS total_molecules,
-    COUNT(DISTINCT da.struct_id) AS approved_drugs,
-    COUNT(DISTINCT c.cancer_type) AS cancer_types_involved
-FROM intogen_driver ig
-JOIN protein p ON p.accession = ig.accession
-JOIN drug_target dt ON dt.accession = p.accession
-JOIN cohort c ON c.cohort = ig.cohort
-LEFT JOIN drug_approval da ON da.struct_id = dt.struct_id
-GROUP BY ig.symbol, p.target_class, p.tdl
-HAVING COUNT(DISTINCT dt.struct_id) >= 15
-ORDER BY total_molecules DESC
-LIMIT 10;
-
-
--- QUERY 5: Polifarmacologia — Farmaci Multi-Target nello Stesso Tumore
+-- ------------------------------------------------------------
+-- QUERY 7 (ex LIVELLO 2 Q5): Polifarmacologia — Farmaci Multi-Target nello Stesso Tumore
+-- Tabelle: intogen_driver, cohort, drug_target, drug (3 JOIN)
+-- Concetto SQL: Raggruppamento per tumore e farmaco, HAVING su conteggio distinto, GROUP_CONCAT.
+-- Spiegazione: Identifica farmaci capaci di inibire contemporaneamente più geni driver
+--              dello stesso tumore ("un cocktail in una sola molecola"), riducendo il rischio di resistenze.
+-- ------------------------------------------------------------
 SELECT 
     c.cancer_type,
     d.drug_name,
@@ -262,45 +223,17 @@ WHERE dt.moa = 1
 GROUP BY c.cancer_type, d.struct_id, d.drug_name
 HAVING COUNT(DISTINCT ig.symbol) >= 2
 ORDER BY n_driver_targets_hit DESC, c.cancer_type
-LIMIT 12;
-
-
--- QUERY 6: Panorama delle Classi Funzionali dei Bersagli (Target Landscape)
-SELECT 
-    COALESCE(p.target_class, 'Non classificata') AS target_class,
-    COUNT(DISTINCT p.accession) AS total_human_proteins,
-    COUNT(DISTINCT ig.symbol) AS driver_genes_count,
-    COUNT(DISTINCT dt.struct_id) AS total_targeting_drugs
-FROM protein p
-LEFT JOIN intogen_driver ig ON ig.accession = p.accession
-LEFT JOIN drug_target dt ON dt.accession = p.accession
-GROUP BY p.target_class
-ORDER BY total_targeting_drugs DESC
 LIMIT 10;
 
 
--- ============================================================
--- LIVELLO 3: QUERY DECISIONALI, ANTI-JOIN E FORMULE MATEMATICHE
--- ============================================================
-
--- QUERY 7: Target Discovery — Geni Driver "Orfani" ad Alta Ricorrenza (Anti-Join)
-SELECT 
-    ig.symbol AS undrugged_driver_gene,
-    p.accession AS uniprot_accession,
-    COALESCE(p.target_class, 'Non classificata') AS target_class,
-    COALESCE(p.tdl, 'Tdark') AS target_development_level,
-    COUNT(DISTINCT ig.cohort) AS detected_in_n_cohorts,
-    SUM(ig.samples) AS total_mutated_patients
-FROM intogen_driver ig
-JOIN protein p ON p.accession = ig.accession
-LEFT JOIN drug_target dt ON dt.accession = p.accession
-WHERE dt.struct_id IS NULL
-GROUP BY ig.symbol, p.accession, p.target_class, p.tdl
-ORDER BY detected_in_n_cohorts DESC, total_mutated_patients DESC
-LIMIT 10;
-
-
--- QUERY 8: Drug Repurposing su Tumori a Prognosi Infausta (Pancreas PAAD e Glioblastoma GBM)
+-- ------------------------------------------------------------
+-- QUERY 8 (ex LIVELLO 3 Q8): Drug Repurposing su Tumori a Prognosi Infausta (PAAD e GBM)
+-- Tabelle: intogen_driver, cohort, drug_target, drug, drug_approval (4 JOIN)
+-- Concetto SQL: Filtro categorico su istotipi (IN), unione tra dati clinici e approvazioni, GROUP_CONCAT.
+-- Spiegazione: Per patologie aggressive a prognosi infausta (pancreas PAAD e glioblastoma GBM),
+--              individua farmaci già approvati per altre indicazioni che possono essere
+--              rapidamente riposizionati sui bersagli mutati di questi pazienti.
+-- ------------------------------------------------------------
 SELECT 
     c.cancer_type,
     ig.symbol AS target_driver_gene,
@@ -317,29 +250,4 @@ WHERE c.cancer_type IN ('PAAD', 'GBM')
   AND dt.moa = 1
 GROUP BY c.cancer_type, ig.symbol, d.drug_name, dt.action_type
 ORDER BY c.cancer_type, mutated_samples_in_cohorts DESC, d.drug_name
-LIMIT 12;
-
-
--- QUERY 9: Potenza Farmacologica Sub-Nanomolare e Conversione Logaritmica (CTE + Math)
-WITH HighAffinityInteractions AS (
-    SELECT 
-        ig.symbol AS driver_gene,
-        d.drug_name,
-        a.act_type,
-        a.act_value
-    FROM activity a
-    JOIN drug d ON d.struct_id = a.struct_id
-    JOIN intogen_driver ig ON ig.accession = a.accession
-    WHERE a.act_value >= 8.5
-      AND a.act_type IN ('IC50', 'Ki', 'Kd')
-)
-SELECT 
-    driver_gene,
-    drug_name,
-    act_type,
-    MAX(act_value) AS max_log_potency,
-    ROUND(POW(10, -(MAX(act_value) - 9)), 3) AS approx_concentration_nM
-FROM HighAffinityInteractions
-GROUP BY driver_gene, drug_name, act_type
-ORDER BY max_log_potency DESC
 LIMIT 10;

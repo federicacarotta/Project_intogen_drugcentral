@@ -1,7 +1,7 @@
 -- ============================================================
 -- schema.sql
 -- Database IntOGen-DrugCentral
--- Crea le 8 tabelle e i vincoli di integrità referenziale.
+-- Crea le 7 tabelle e i vincoli di integrità referenziale.
 --
 -- Uso:
 --   mysql -u <user> -p < sql/schema.sql
@@ -96,32 +96,7 @@ CREATE TABLE drug_target (
 ) ENGINE=InnoDB;
 
 -- ============================================================
--- 6. ACTIVITY
--- Misurazioni quantitative di attività farmacologica.
--- act_value è tipicamente in scala -log10 (pIC50, pKi, ecc.)
--- ============================================================
-CREATE TABLE activity (
-    id            INT           NOT NULL AUTO_INCREMENT,
-    struct_id     INT           NOT NULL,
-    accession     VARCHAR(15)   NOT NULL,
-    act_type      VARCHAR(20),
-    act_value     DECIMAL(10,4),
-    relation      VARCHAR(5),
-    act_source    VARCHAR(50),
-    act_comment   TEXT,
-    PRIMARY KEY (id),
-    KEY idx_act_drug (struct_id),
-    KEY idx_act_acc  (accession),
-    CONSTRAINT fk_act_drug
-        FOREIGN KEY (struct_id) REFERENCES drug(struct_id)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT fk_act_protein
-        FOREIGN KEY (accession) REFERENCES protein(accession)
-        ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- ============================================================
--- 7. COHORT
+-- 6. COHORT
 -- Coorti tumorali analizzate da IntOGen.
 -- ============================================================
 CREATE TABLE cohort (
@@ -132,7 +107,7 @@ CREATE TABLE cohort (
 ) ENGINE=InnoDB;
 
 -- ============================================================
--- 8. INTOGEN_DRIVER
+-- 7. INTOGEN_DRIVER
 -- Geni driver identificati per coorte. Il campo accession
 -- collega il gene alla proteina (ponte UniProt).
 -- ============================================================
