@@ -2,18 +2,16 @@
 -- queries.sql
 -- Progetto Basi di Dati: IntOGen + DrugCentral su MySQL
 --
--- Include:
---   1. VISTA INTEGRATA (v_driver_drug_candidates)
---   2. CONTROLLI DI QUALITÀ E VERIFICA MAPPING
---   3. 8 QUERY ANALITICHE PER LA PRESENTAZIONE (JOIN, GROUP BY,
---      HAVING, CTE/SUBQUERIES, FILTRI BIOLOGICI, ANALISI COORTI)
+-- INDICE DEI CONTENUTI:
+--   PARTE 1: VISTA INTEGRATA (v_driver_drug_candidates) & QC
+--   PARTE 2: 5 QUERY LINEARI BASE (MAX 1-3 JOIN, SEMPLICI E DIRETTE)
+--   PARTE 3: QUERY ANALITICHE STRUTTURATE (I 3 LIVELLI D'ESAME)
 -- ============================================================
 
 USE intogen_drugcentral;
 
 -- ============================================================
--- SEZIONE 1: VISTA INTEGRATA
--- Unisce geni driver, coorti, proteine UniProt, bersagli e farmaci
+-- PARTE 1: VISTA INTEGRATA E CONTROLLI DI QUALITÀ
 -- ============================================================
 
 CREATE OR REPLACE VIEW v_driver_drug_candidates AS
@@ -47,11 +45,6 @@ GROUP BY
     d.struct_id, d.drug_name, dt.action_type, dt.moa, 
     ig.qvalue_combination, ig.mutations, ig.samples;
 
-
--- ============================================================
--- SEZIONE 2: CONTROLLI DI QUALITÀ DEL MAPPING (Quality Control)
--- ============================================================
-
 -- QC 1. Percentuale di copertura dei geni driver IntOGen in DrugCentral
 SELECT 
     COUNT(DISTINCT ig.symbol) AS total_driver_genes,
@@ -62,191 +55,291 @@ SELECT
 FROM intogen_driver ig
 LEFT JOIN drug_target dt ON dt.accession = ig.accession;
 
--- QC 2. Distribuzione delle classi proteiche dei target (es. Chinasi, GPCR, Enzimi)
+
+-- ============================================================
+-- PARTE 2: 5 QUERY LINEARI BASE (MAX 1-3 JOIN, NESSUNA COMPLESSITÀ)
+-- Ideali da presentare all'inizio dell'orale per spiegare le tabelle
+-- ============================================================
+
+-- ------------------------------------------------------------
+-- BASE 1 (1 JOIN): I geni driver più mutati nel tumore al seno (BRCA)
+-- Tabelle: intogen_driver, cohort
+-- Concetto SQL: INNER JOIN tra tabella fatti e coorti, filtro su stringa, ordinamento numerico.
+-- Spiegazione: Mostra quali geni presentano il maggior numero di pazienti mutati
+--              negli studi clinici sul carcinoma mammario (es. PIK3CA, TP53).
+-- ------------------------------------------------------------
+SELECT 
+    ig.symbol AS gene,
+    ig.role AS biological_role,
+    ig.samples AS mutated_patients,
+    c.cohort
+FROM intogen_driver ig
+JOIN cohort c ON c.cohort = ig.cohort
+WHERE c.cancer_type = 'BRCA'
+ORDER BY ig.samples DESC
+LIMIT 10;
+
+
+-- ------------------------------------------------------------
+-- BASE 2 (1 JOIN): Farmaci inibitori con meccanismo d'azione primario
+-- Tabelle: drug, drug_target
+-- Concetto SQL: INNER JOIN tra farmaco e bersaglio, doppio filtro WHERE su flag e tipo azione.
+-- Spiegazione: Isola le molecole che hanno come target primario validato (moa = 1)
+--              un'azione inibitoria ('INHIBITOR'), scartando legami aspecifici.
+-- ------------------------------------------------------------
+SELECT DISTINCT
+    d.drug_name,
+    dt.action_type,
+    dt.target_class
+FROM drug d
+JOIN drug_target dt ON dt.struct_id = d.struct_id
+WHERE dt.moa = 1 
+  AND dt.action_type = 'INHIBITOR'
+ORDER BY d.drug_name
+LIMIT 10;
+
+
+-- ------------------------------------------------------------
+-- BASE 3 (2 JOIN): Farmaci approvati FDA attivi sulla famiglia delle chinasi
+-- Tabelle: drug, drug_approval, drug_target
+-- Concetto SQL: Due INNER JOIN a stella con centro sull'anagrafica del farmaco (drug).
+-- Spiegazione: Mostra i farmaci certificati dall'ente regolatore americano (FDA)
+--              che colpiscono specificamente la classe proteica delle Chinasi.
+-- ------------------------------------------------------------
+SELECT DISTINCT
+    d.drug_name,
+    da.agency,
+    dt.target_class
+FROM drug d
+JOIN drug_approval da ON da.struct_id = d.struct_id
+JOIN drug_target dt ON dt.struct_id = d.struct_id
+WHERE da.agency = 'FDA'
+  AND dt.target_class = 'Kinase'
+ORDER BY d.drug_name
+LIMIT 10;
+
+
+-- ------------------------------------------------------------
+-- BASE 4 (2 JOIN): Geni driver e anagrafica proteica nel glioblastoma (GBM)
+-- Tabelle: intogen_driver, protein, cohort
+-- Concetto SQL: Due INNER JOIN che collegano il tumore alla proteina anagrafica via accession.
+-- Spiegazione: Per un tumore cerebrale ad alta mortalità (GBM), elenca i geni driver
+--              con il nome completo della proteina UniProt e la classe funzionale.
+-- ------------------------------------------------------------
+SELECT DISTINCT
+    ig.symbol AS driver_gene,
+    p.entry_name,
+    p.target_class,
+    ig.role
+FROM intogen_driver ig
+JOIN protein p ON p.accession = ig.accession
+JOIN cohort c ON c.cohort = ig.cohort
+WHERE c.cancer_type = 'GBM'
+ORDER BY ig.symbol
+LIMIT 10;
+
+
+-- ------------------------------------------------------------
+-- BASE 5 (3 JOIN): Il ponte relazionale completo per un oncogene chiave (EGFR)
+-- Tabelle: intogen_driver, protein, drug_target, drug
+-- Concetto SQL: Tre INNER JOIN lineari: Gene -> Proteina -> Target -> Farmaco.
+-- Spiegazione: Rappresenta il percorso fondante del progetto: dato il gene EGFR
+--              identificato in IntOGen, naviga attraverso UniProt ed elenca
+--              tutti i farmaci censiti in DrugCentral con la loro azione.
+-- ------------------------------------------------------------
+SELECT DISTINCT
+    ig.symbol AS gene,
+    p.entry_name,
+    d.drug_name,
+    dt.action_type
+FROM intogen_driver ig
+JOIN protein p ON p.accession = ig.accession
+JOIN drug_target dt ON dt.accession = p.accession
+JOIN drug d ON d.struct_id = dt.struct_id
+WHERE ig.symbol = 'EGFR'
+  AND dt.action_type IS NOT NULL
+ORDER BY d.drug_name
+LIMIT 10;
+
+
+-- ============================================================
+-- PARTE 3: LE 9 QUERY ANALITICHE STRUTTURATE (I 3 LIVELLI D'ESAME)
+-- ============================================================
+
+-- ============================================================
+-- LIVELLO 1: AGGREGAZIONI DI BASE E VALIDAZIONE
+-- ============================================================
+
+-- QUERY 1: Terapie a Bersaglio Molecolare nel Tumore al Polmone (LUAD)
+SELECT 
+    ig.symbol AS driver_gene,
+    d.drug_name,
+    dt.action_type,
+    GROUP_CONCAT(DISTINCT da.agency ORDER BY da.agency SEPARATOR ', ') AS approved_by
+FROM intogen_driver ig
+JOIN cohort c ON c.cohort = ig.cohort
+JOIN protein p ON p.accession = ig.accession
+JOIN drug_target dt ON dt.accession = p.accession
+JOIN drug d ON d.struct_id = dt.struct_id
+JOIN drug_approval da ON da.struct_id = d.struct_id
+WHERE c.cancer_type = 'LUAD'
+  AND dt.moa = 1
+GROUP BY ig.symbol, d.drug_name, dt.action_type
+ORDER BY ig.symbol, d.drug_name
+LIMIT 15;
+
+
+-- QUERY 2: Match Meccanicistico Oncogene ↔ Farmaco Inibitore
+SELECT DISTINCT 
+    c.cancer_type,
+    ig.symbol AS oncogene,
+    p.target_class,
+    d.drug_name,
+    dt.action_type
+FROM intogen_driver ig
+JOIN cohort c ON c.cohort = ig.cohort
+JOIN protein p ON p.accession = ig.accession
+JOIN drug_target dt ON dt.accession = p.accession
+JOIN drug d ON d.struct_id = dt.struct_id
+WHERE ig.role = 'Act'
+  AND (
+      dt.action_type LIKE '%INHIBITOR%' 
+      OR dt.action_type LIKE '%ANTAGONIST%' 
+      OR dt.action_type LIKE '%BLOCKER%'
+  )
+ORDER BY c.cancer_type, ig.symbol, d.drug_name
+LIMIT 15;
+
+
+-- QUERY 3: Validazione Epidemiologica delle Coorti (Dimostrazione 3NF)
+SELECT 
+    c.cancer_type,
+    COUNT(DISTINCT c.cohort) AS n_cohorts,
+    SUM(c.total_samples) AS total_patients_sequenced,
+    COUNT(DISTINCT ig.symbol) AS unique_driver_genes,
+    ROUND(SUM(c.total_samples) / COUNT(DISTINCT c.cohort), 0) AS avg_patients_per_cohort
+FROM cohort c
+LEFT JOIN intogen_driver ig ON ig.cohort = c.cohort
+GROUP BY c.cancer_type
+ORDER BY total_patients_sequenced DESC
+LIMIT 10;
+
+
+-- ============================================================
+-- LIVELLO 2: AGGREGAZIONI CON HAVING E ANALISI DI RETE
+-- ============================================================
+
+-- QUERY 4: Druggability Ranking dei Geni Driver Oncologici
+SELECT 
+    ig.symbol AS driver_gene,
+    p.target_class,
+    p.tdl,
+    COUNT(DISTINCT dt.struct_id) AS total_molecules,
+    COUNT(DISTINCT da.struct_id) AS approved_drugs,
+    COUNT(DISTINCT c.cancer_type) AS cancer_types_involved
+FROM intogen_driver ig
+JOIN protein p ON p.accession = ig.accession
+JOIN drug_target dt ON dt.accession = p.accession
+JOIN cohort c ON c.cohort = ig.cohort
+LEFT JOIN drug_approval da ON da.struct_id = dt.struct_id
+GROUP BY ig.symbol, p.target_class, p.tdl
+HAVING COUNT(DISTINCT dt.struct_id) >= 15
+ORDER BY total_molecules DESC
+LIMIT 10;
+
+
+-- QUERY 5: Polifarmacologia — Farmaci Multi-Target nello Stesso Tumore
+SELECT 
+    c.cancer_type,
+    d.drug_name,
+    COUNT(DISTINCT ig.symbol) AS n_driver_targets_hit,
+    GROUP_CONCAT(DISTINCT ig.symbol ORDER BY ig.symbol SEPARATOR ', ') AS targeted_driver_genes
+FROM intogen_driver ig
+JOIN cohort c ON c.cohort = ig.cohort
+JOIN drug_target dt ON dt.accession = ig.accession
+JOIN drug d ON d.struct_id = dt.struct_id
+WHERE dt.moa = 1
+GROUP BY c.cancer_type, d.struct_id, d.drug_name
+HAVING COUNT(DISTINCT ig.symbol) >= 2
+ORDER BY n_driver_targets_hit DESC, c.cancer_type
+LIMIT 12;
+
+
+-- QUERY 6: Panorama delle Classi Funzionali dei Bersagli (Target Landscape)
 SELECT 
     COALESCE(p.target_class, 'Non classificata') AS target_class,
-    COUNT(DISTINCT p.accession) AS total_proteins,
-    COUNT(DISTINCT dt.struct_id) AS total_drugs
+    COUNT(DISTINCT p.accession) AS total_human_proteins,
+    COUNT(DISTINCT ig.symbol) AS driver_genes_count,
+    COUNT(DISTINCT dt.struct_id) AS total_targeting_drugs
 FROM protein p
+LEFT JOIN intogen_driver ig ON ig.accession = p.accession
 LEFT JOIN drug_target dt ON dt.accession = p.accession
 GROUP BY p.target_class
-ORDER BY total_proteins DESC;
+ORDER BY total_targeting_drugs DESC
+LIMIT 10;
 
 
 -- ============================================================
--- SEZIONE 3: QUERY ANALITICHE PER LA PRESENTAZIONE AL DOCENTE
+-- LIVELLO 3: QUERY DECISIONALI, ANTI-JOIN E FORMULE MATEMATICHE
 -- ============================================================
 
--- ------------------------------------------------------------
--- QUERY 1: Farmaci associati ai geni driver di uno specifico tumore
--- Domanda biologica: Quali molecole colpiscono i driver del tumore al seno (BRCA)?
--- Mostra: JOIN, filtri specifici, ordinamento.
--- ------------------------------------------------------------
-SELECT DISTINCT 
-    driver_gene,
-    driver_role,
-    drug_name,
-    action_type,
-    moa,
-    COALESCE(approved_by, 'In sperimentazione') AS approval_status
-FROM v_driver_drug_candidates
-WHERE cancer_type = 'BRCA'
-ORDER BY driver_gene, drug_name;
-
-
--- ------------------------------------------------------------
--- QUERY 2: Geni driver più "druggable" (con maggior numero di farmaci associati)
--- Domanda biologica: Quali oncoproteine presentano il maggior arsenale terapeutico?
--- Mostra: GROUP BY, funzione di aggregazione COUNT(DISTINCT), clausola HAVING.
--- ------------------------------------------------------------
-SELECT 
-    driver_gene,
-    target_uniprot,
-    target_class,
-    tdl,
-    COUNT(DISTINCT drugcentral_id) AS n_distinct_drugs,
-    COUNT(DISTINCT CASE WHEN approved_by IS NOT NULL THEN drugcentral_id END) AS n_approved_drugs
-FROM v_driver_drug_candidates
-GROUP BY driver_gene, target_uniprot, target_class, tdl
-HAVING COUNT(DISTINCT drugcentral_id) >= 10
-ORDER BY n_distinct_drugs DESC;
-
-
--- ------------------------------------------------------------
--- QUERY 3: Farmaci ad ampio spettro (multi-target) nello stesso tumore
--- Domanda biologica: Esistono farmaci che colpiscono contemporaneamente più geni driver
---                    dello stesso tumore (possibile sinergia o politerapia single-agent)?
--- Mostra: GROUP BY composto, HAVING, conteggio condizionale.
--- ------------------------------------------------------------
-SELECT 
-    cancer_type,
-    drug_name,
-    approved_by,
-    COUNT(DISTINCT driver_gene) AS n_driver_targets_hit,
-    GROUP_CONCAT(DISTINCT driver_gene ORDER BY driver_gene SEPARATOR ', ') AS targeted_genes
-FROM v_driver_drug_candidates
-GROUP BY cancer_type, drugcentral_id, drug_name, approved_by
-HAVING COUNT(DISTINCT driver_gene) >= 3
-ORDER BY n_driver_targets_hit DESC, cancer_type;
-
-
--- ------------------------------------------------------------
--- QUERY 4: Query "Biologicamente Prudente": Ruolo del driver + Meccanismo Farmacologico
--- Domanda biologica: Se il gene è un oncogene (Act), il farmaco agisce come inibitore?
---                    (Filtro meccanicistico per isolare i candidati coerenti)
--- Mostra: Pattern matching LIKE, filtri semantici combinati, CASE WHEN.
--- ------------------------------------------------------------
-SELECT DISTINCT 
-    cancer_type,
-    driver_gene,
-    driver_role,
-    drug_name,
-    action_type,
-    approved_by
-FROM v_driver_drug_candidates
-WHERE driver_role = 'Act'
-  AND (
-      UPPER(action_type) LIKE '%INHIBITOR%' 
-      OR UPPER(action_type) LIKE '%ANTAGONIST%' 
-      OR UPPER(action_type) LIKE '%BLOCKER%'
-  )
-ORDER BY cancer_type, driver_gene, drug_name;
-
-
--- ------------------------------------------------------------
--- QUERY 5: Opportunità di Drug Discovery (Geni driver "orfani" ad alta frequenza)
--- Domanda biologica: Quali sono i geni driver trovati in più coorti/pazienti
---                    per cui DrugCentral non ha ALCUN farmaco registrato?
--- Mostra: LEFT JOIN tra tabelle base, condizione IS NULL, aggregazione su coorti.
--- ------------------------------------------------------------
+-- QUERY 7: Target Discovery — Geni Driver "Orfani" ad Alta Ricorrenza (Anti-Join)
 SELECT 
     ig.symbol AS undrugged_driver_gene,
-    p.accession AS uniprot_acc,
-    p.target_class,
-    COALESCE(p.tdl, 'Tdark') AS tdl,
-    COUNT(DISTINCT ig.cohort) AS n_cohorts_detected,
-    SUM(ig.samples) AS total_mutated_samples
+    p.accession AS uniprot_accession,
+    COALESCE(p.target_class, 'Non classificata') AS target_class,
+    COALESCE(p.tdl, 'Tdark') AS target_development_level,
+    COUNT(DISTINCT ig.cohort) AS detected_in_n_cohorts,
+    SUM(ig.samples) AS total_mutated_patients
 FROM intogen_driver ig
 JOIN protein p ON p.accession = ig.accession
 LEFT JOIN drug_target dt ON dt.accession = p.accession
 WHERE dt.struct_id IS NULL
 GROUP BY ig.symbol, p.accession, p.target_class, p.tdl
-ORDER BY n_cohorts_detected DESC, total_mutated_samples DESC
-LIMIT 15;
+ORDER BY detected_in_n_cohorts DESC, total_mutated_patients DESC
+LIMIT 10;
 
 
--- ------------------------------------------------------------
--- QUERY 6: Farmaci ad altissima affinità sperimentale (Misure quantitative di Activity)
--- Domanda biologica: Quali interazioni farmaco-oncoproteina presentano una potenza sub-nanomolare
---                    (act_value >= 8.0, corrispondente a IC50/Ki <= 10 nM)?
--- Mostra: JOIN su tabella numerica `activity`, CTE (Common Table Expression), filtri numerici.
--- ------------------------------------------------------------
+-- QUERY 8: Drug Repurposing su Tumori a Prognosi Infausta (Pancreas PAAD e Glioblastoma GBM)
+SELECT 
+    c.cancer_type,
+    ig.symbol AS target_driver_gene,
+    d.drug_name,
+    dt.action_type,
+    GROUP_CONCAT(DISTINCT da.agency ORDER BY da.agency SEPARATOR ', ') AS approved_by,
+    SUM(ig.samples) AS mutated_samples_in_cohorts
+FROM intogen_driver ig
+JOIN cohort c ON c.cohort = ig.cohort
+JOIN drug_target dt ON dt.accession = ig.accession
+JOIN drug d ON d.struct_id = dt.struct_id
+JOIN drug_approval da ON da.struct_id = d.struct_id
+WHERE c.cancer_type IN ('PAAD', 'GBM')
+  AND dt.moa = 1
+GROUP BY c.cancer_type, ig.symbol, d.drug_name, dt.action_type
+ORDER BY c.cancer_type, mutated_samples_in_cohorts DESC, d.drug_name
+LIMIT 12;
+
+
+-- QUERY 9: Potenza Farmacologica Sub-Nanomolare e Conversione Logaritmica (CTE + Math)
 WITH HighAffinityInteractions AS (
     SELECT 
-        d.drug_name,
-        p.entry_name,
         ig.symbol AS driver_gene,
+        d.drug_name,
         a.act_type,
-        a.act_value,
-        a.act_source
+        a.act_value
     FROM activity a
     JOIN drug d ON d.struct_id = a.struct_id
-    JOIN protein p ON p.accession = a.accession
-    JOIN intogen_driver ig ON ig.accession = p.accession
-    WHERE a.act_value >= 8.0
+    JOIN intogen_driver ig ON ig.accession = a.accession
+    WHERE a.act_value >= 8.5
       AND a.act_type IN ('IC50', 'Ki', 'Kd')
 )
 SELECT 
     driver_gene,
     drug_name,
     act_type,
-    MAX(act_value) AS max_potency_pVal,
-    ROUND(POW(10, -(MAX(act_value) - 9)), 2) AS approx_concentration_nM
+    MAX(act_value) AS max_log_potency,
+    ROUND(POW(10, -(MAX(act_value) - 9)), 3) AS approx_concentration_nM
 FROM HighAffinityInteractions
 GROUP BY driver_gene, drug_name, act_type
-ORDER BY max_potency_pVal DESC
-LIMIT 20;
-
-
--- ------------------------------------------------------------
--- QUERY 7: Riposizionamento Farmacologico (Drug Repurposing)
--- Domanda biologica: Quali farmaci già approvati (FDA / EMA) per altre indicazioni
---                    colpiscono oncoproteine di tumori rari o ad alta mortalità (es. PAAD, GBM)?
--- Mostra: Sottoquery correlata, vincoli di approvazione, GROUP_CONCAT.
--- ------------------------------------------------------------
-SELECT 
-    v.drug_name,
-    v.approved_by,
-    v.driver_gene,
-    v.action_type,
-    v.cancer_type,
-    v.samples AS cohort_mutated_samples
-FROM v_driver_drug_candidates v
-WHERE v.cancer_type IN ('PAAD', 'GBM', 'LAML') -- Pancreas, Glioblastoma, Leucemia mieloide
-  AND v.approved_by IS NOT NULL
-  AND v.moa = 1
-ORDER BY v.cancer_type, v.drug_name;
-
-
--- ------------------------------------------------------------
--- QUERY 8: Analisi epidemiologica delle coorti (Giustificazione suddivisione COHORT / INTOGEN_DRIVER)
--- Domanda biologica: Quante coorti e quanti pazienti totali sono stati sequenziati per ciascun tipo tumorale,
---                    e quanti geni driver unici sono stati identificati?
--- Perché giustifica la suddivisione:
---   Se COHORT e INTOGEN_DRIVER fossero un'unica tabella non normalizzata, SUM(total_samples) moltiplicherebbe
---   il numero di pazienti per ogni gene driver scoperto in quella coorte (sovrastima da 20x a 100x!).
---   Separando le tabelle, la dimensione campionaria è un attributo puro della coorte (2NF/3NF),
---   garantendo statistiche corrette, zero ridondanza e facilità di JOIN con i driver.
--- Mostra: LEFT JOIN tra tabella di dimensione (cohort) e tabella dei fatti (intogen_driver), aggregazioni accurate.
--- ------------------------------------------------------------
-SELECT 
-    c.cancer_type,
-    COUNT(DISTINCT c.cohort) AS n_cohorts,
-    SUM(c.total_samples) AS total_patients_sequenced,
-    COUNT(DISTINCT ig.symbol) AS total_unique_driver_genes,
-    ROUND(SUM(c.total_samples) / COUNT(DISTINCT c.cohort), 0) AS avg_patients_per_cohort
-FROM cohort c
-LEFT JOIN intogen_driver ig ON ig.cohort = c.cohort
-GROUP BY c.cancer_type
-ORDER BY total_patients_sequenced DESC
-LIMIT 20;
+ORDER BY max_log_potency DESC
+LIMIT 10;
